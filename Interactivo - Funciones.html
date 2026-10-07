@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactivo: Funciones en Python</title>
+<style>
+  :root{
+    --azul:#1a4d7a; --azul2:#2e6ca4; --claro:#eaf2f8; --acento:#c0392b;
+    --codigo-bg:#1e1e2e; --codigo-fg:#e6e6e6; --gris:#555; --linea:#d6e0ea;
+    --verde:#1e7e4a; --verde-bg:#d4f5dd; --amarillo-bg:#fff3bf; --naranja-bg:#ffe0cc;
+  }
+  html{font-size:17px}
+  *{box-sizing:border-box}
+  body{font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;color:#222;margin:0;background:#f7f9fb}
+  .intro code{background:#eef3f8;padding:1px 5px;border-radius:4px}
+  code,pre,.mono{font-family:"Fira Code",Consolas,"Courier New",monospace}
+  .marca{background:#fff;display:flex;align-items:center;justify-content:space-between;
+         gap:18px;padding:14px 30px;border-bottom:3px solid var(--acento);flex-wrap:wrap}
+  .marca img{width:auto;flex:0 0 auto}
+  .marca .logo-cbtis{height:48px}
+  .marca-texto{flex:1 1 auto;text-align:right;color:var(--azul2);font-weight:600;
+         font-size:1.05rem;line-height:1.35}
+  .marca-nombre{display:block;color:var(--azul);font-size:1.25rem;font-weight:700}
+  header{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;padding:34px 40px;text-align:center}
+  header h1{margin:0 0 10px;font-size:1.9rem;line-height:1.25}
+  header p{margin:2px 0;opacity:.95;font-size:.95rem}
+  @media (max-width:600px){header{padding:26px 18px}header h1{font-size:1.5rem}.marca{padding:12px 16px}}
+  .contenedor{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+  .card{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  h2{color:var(--azul);margin:0 0 6px;font-size:1.25rem}
+  h3{color:var(--azul);margin:0 0 6px;font-size:1.05rem}
+  .intro{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+  .intro p{margin:4px 0}
+  .leyenda{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.85rem;margin-top:8px}
+  .leyenda span{display:inline-flex;align-items:center;gap:6px}
+  .leyenda i{width:16px;height:16px;border-radius:4px;border:2px solid;display:inline-block}
+  .barra{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+  .barra label{font-weight:600;color:var(--azul)}
+  select,input[type=text],input[type=number]{font:inherit;padding:6px 9px;border:1px solid #b9c7d4;border-radius:7px;background:#fff;min-width:0}
+  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--azul2);background:#fff;color:var(--azul);padding:6px 13px}
+  button:hover{background:var(--claro)}
+  button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #f1c40f;outline-offset:1px}
+  .ops{margin-bottom:14px}
+  .grupo{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+  .grupo h2{margin:0 0 2px;font-size:1.1rem}
+  .grupo-desc{margin:0 0 10px;font-size:.88rem;color:var(--gris)}
+  .fila-tabs{display:flex;flex-wrap:wrap;gap:8px}
+  .ops button{padding:7px 11px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+  .ops button[aria-selected=true]{background:var(--azul);color:#fff;border-color:var(--azul)}
+  .nivel{font-size:.62rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:20px;padding:1px 7px;border:1px solid}
+  .n1{background:#d4f5dd;color:#14532d;border-color:#27ae60}
+  .n2{background:#fff3bf;color:#7a5200;border-color:#e0a800}
+  .n3{background:#ece0fb;color:#4a2a7a;border-color:#8e5bd0}
+  .grupo-desc .nivel{margin:0 2px}
+  .panel{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:16px;align-items:start}
+  .campo{display:block;margin:9px 0}
+  .campo>span{display:block;font-weight:600;font-size:.9rem;color:var(--azul);margin-bottom:3px}
+  .campo input[type=text],.campo input[type=number],.campo select{width:100%}
+  .campo.chk{display:flex;align-items:center;gap:8px}
+  .campo.chk>span{margin:0}
+  .ayuda{font-size:.8rem;color:var(--gris);margin-top:2px}
+  pre.codigo{background:var(--codigo-bg);color:var(--codigo-fg);border-radius:9px;padding:12px 14px;margin:12px 0;overflow-x:auto;font-size:.9rem;line-height:1.5;white-space:pre}
+  .s{color:#a6e3a1}.k{color:#cba6f7}.n{color:#fab387}.c{color:#7f849c}.m{color:#89b4fa}
+  .ejecutar{background:var(--acento);border-color:var(--acento);color:#fff;font-weight:700;width:100%;padding:10px}
+  .ejecutar:hover{background:#a93226}
+  .ejecutar:disabled{opacity:.5;cursor:default}
+  .estado{background:var(--codigo-bg);color:var(--codigo-fg);border-radius:9px 9px 0 0;padding:8px 14px;font-size:.88rem;overflow-x:auto;white-space:nowrap}
+  .escenario{background:#fff;border:1px solid var(--linea);border-top:0;border-radius:0 0 12px 12px;padding:16px 14px;overflow-x:auto;min-height:150px}
+  .fila{display:flex;align-items:flex-end;gap:8px;width:max-content;min-width:100%}
+  .etq{display:flex;flex-direction:column;font-size:.72rem;color:var(--gris);text-align:right;padding-right:4px;min-width:54px}
+  .etq .a,.etq .c{height:26px;display:flex;align-items:center;justify-content:flex-end}
+  .etq .b{height:62px}
+  .celda{display:flex;flex-direction:column;align-items:center;min-width:78px}
+  .pos,.neg{height:26px;display:flex;align-items:center;font-family:"Fira Code",Consolas,monospace;font-size:.85rem;font-weight:700}
+  .pos{color:var(--azul2)} .neg{color:#b07a74}
+  .caja{width:100%;height:62px;border:2px solid #9fb3c6;border-radius:8px;background:#f4f8fb;display:flex;align-items:center;justify-content:center;padding:0 8px;
+        font-family:"Fira Code",Consolas,monospace;font-weight:700;font-size:.95rem;word-break:break-all;text-align:center}
+  .str .caja{color:var(--verde)} .num .caja{color:var(--azul)}
+  .leer .caja{background:var(--amarillo-bg);border-color:#e0a800;animation:pulso 1s ease-in-out 2}
+  .cambio .caja{background:var(--naranja-bg);border-color:#e67e22}
+  .nuevo .caja{background:var(--verde-bg);border-color:#27ae60;animation:pop .45s}
+  .quitar .caja{background:#fadbd8;border-color:var(--acento);text-decoration:line-through;opacity:.75}
+  .sel .caja{background:#d6eaf8;border-color:var(--azul2)}
+  .fuera{opacity:.3}
+  .corre{animation:corre .45s}
+  .vacia{width:100%;text-align:center;color:var(--gris);padding:34px 0;font-family:"Fira Code",Consolas,monospace}
+  #resWrap .res{margin-top:12px;border:1px dashed #9fb3c6;border-radius:12px;padding:10px 14px;background:#fbfdff;overflow-x:auto}
+  #resWrap .res h3{font-size:.9rem;margin-bottom:4px}
+  .explica{margin-top:12px;background:var(--claro);border-left:5px solid var(--azul2);border-radius:8px;padding:10px 14px;min-height:3.4rem}
+  .explica code{background:#dbe7f1;padding:1px 5px;border-radius:4px;font-size:.88em}
+  .explica .err{color:#7b241c}
+  .explica .aviso{color:#8a5a00}
+  .cmp{width:100%;border-collapse:collapse;font-size:.88rem;font-family:"Fira Code",Consolas,monospace}
+  .cmp td{padding:5px 8px;border-bottom:1px solid var(--linea);white-space:pre-wrap;word-break:break-word}
+  .cmp td:nth-child(2){width:1.6em;color:var(--gris);text-align:center}
+  .cmp tr.sel{background:var(--amarillo-bg);font-weight:700}
+  .consola-card{margin:12px 0 0;padding:12px 14px}
+  .consola-card h2{font-size:1.05rem;margin:0}
+  .consola-h{display:flex;justify-content:space-between;align-items:center}
+  pre.consola{background:var(--codigo-bg);color:var(--codigo-fg);border-radius:9px;padding:12px 14px;margin:6px 0 0;min-height:90px;max-height:240px;overflow:auto;font-size:.88rem;line-height:1.5}
+  .consola .p{color:#7f849c}.consola .out{color:#f9e2af}.consola .err{color:#f38ba8}.consola .nota{color:#7f849c;font-style:italic}
+  .pregunta{border-top:1px solid var(--linea);padding:12px 0}
+  .pregunta:first-of-type{border-top:0}
+  .pregunta label{display:block;margin:4px 0;cursor:pointer}
+  .retro{margin-top:6px;font-size:.9rem;padding:6px 10px;border-radius:7px}
+  .retro.ok{background:var(--verde-bg);color:#14532d}
+  .retro.mal{background:#fadbd8;color:#7b241c}
+  #puntaje{font-weight:700;color:var(--azul)}
+  .voz{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:6px 12px;margin-bottom:12px;font-size:.9rem}
+  .voz label{font-weight:600;color:var(--azul);display:inline-flex;align-items:center;gap:6px}
+  .voz select{max-width:230px;padding:4px 7px;font-size:.88rem}
+  .voz input[type=range]{width:110px}
+  .voz .nota-voz{color:var(--gris);font-size:.82rem}
+  footer{text-align:center;color:var(--gris);font-size:.8rem;padding:0 16px 30px}
+  @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+  @keyframes corre{from{transform:translateX(-86px);opacity:.4}to{transform:none;opacity:1}}
+  @keyframes pulso{0%,100%{box-shadow:0 0 0 0 rgba(224,168,0,0)}50%{box-shadow:0 0 0 8px rgba(224,168,0,.45)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media (max-width:820px){.intro,.panel{grid-template-columns:1fr}}
+
+  :root{--morado:#6c3fb5}
+  .intro>*,.panel>*{min-width:0}
+  .estado{display:flex;justify-content:space-between;align-items:center;gap:14px}
+  .tag-mem{margin-left:auto;font-size:.72rem;font-weight:700;color:#cfe3f7;background:rgba(46,108,164,.5);border:1px solid #6fa3d4;border-radius:20px;padding:1px 9px;white-space:nowrap;font-family:"Segoe UI",Roboto,sans-serif}
+  .pista{color:var(--gris);text-align:center;padding:34px 10px;font-size:.95rem}
+  .maq{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .maq .ent,.maq .sal{display:flex;flex-direction:column;gap:4px;align-items:center;max-width:230px}
+  .maq .etiq{font-size:.7rem;color:var(--gris);text-align:center}
+  .maq .chip{border:2px solid var(--azul2);background:#d6eaf8;border-radius:8px;padding:3px 10px;font-family:"Fira Code",Consolas,monospace;font-size:.86rem;word-break:break-all}
+  .maq .chip.vacio{border-style:dashed;background:#fff;color:var(--gris)}
+  .maq .chip.ok{border-color:#27ae60;background:var(--verde-bg)}
+  .maq .chip.none{border-color:#999;background:#eee;color:#555}
+  .maq .flecha{font-size:1.5rem;color:var(--azul2)}
+  .maq .fn{background:var(--azul);color:#fff;border-radius:12px;padding:10px 16px;font-family:"Fira Code",Consolas,monospace;font-size:.9rem;text-align:center;box-shadow:0 3px 0 #123a5c}
+  .maq .fn small{display:block;font-size:.68rem;opacity:.8;font-family:"Segoe UI",Roboto,sans-serif;margin-bottom:2px}
+  .ayuda-traza{font-size:.8rem;color:var(--gris);margin:4px 0}
+  ol.traza{list-style:none;margin:0;padding:0}
+  ol.traza li{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-left:5px solid var(--linea);margin:5px 0;background:#fbfdff;border-radius:0 8px 8px 0;opacity:0;transform:translateY(5px);transition:opacity .35s,transform .35s;font-size:.9rem}
+  ol.traza li.ver{opacity:1;transform:none}
+  ol.traza li code{background:#e6eef6;padding:0 4px;border-radius:4px;font-size:.88em}
+  ol.traza .ic{flex:0 0 1.5em;text-align:center}
+  ol.traza li.def{border-color:var(--morado);background:#f4effb}
+  ol.traza li.call{border-color:var(--azul2);background:#eaf2f8}
+  ol.traza li.run{border-color:#e0a800;background:#fff9dc}
+  ol.traza li.out{border-color:#27ae60;background:var(--verde-bg)}
+  ol.traza li.ret{border-color:#e67e22;background:var(--naranja-bg)}
+  ol.traza li.err{border-color:var(--acento);background:#fadbd8}
+  ol.traza li.skip{border-color:#bbb;background:#f3f3f3;color:#666}
+  .amb{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .amb .zona{border:2px dashed;border-radius:10px;padding:8px 10px;min-height:76px}
+  .amb .zona.glob{border-color:var(--azul2);background:#eaf2f8}
+  .amb .zona.loc{border-color:#e67e22;background:#fff3e6}
+  .amb h4{margin:0 0 6px;font-size:.74rem;text-transform:uppercase;letter-spacing:.03em;color:var(--gris)}
+  .amb .var{display:block;font-family:"Fira Code",Consolas,monospace;background:#fff;border:1px solid var(--linea);border-radius:6px;padding:2px 8px;margin:4px 0;font-size:.84rem;word-break:break-all}
+  .amb .var.nuevo{background:var(--verde-bg);border-color:#27ae60}
+  .amb .var.cambio{background:var(--naranja-bg);border-color:#e67e22}
+  .amb .var.muerta{opacity:.55;text-decoration:line-through;border-style:dashed}
+  .amb .vaciaz{font-size:.82rem;color:#888;font-style:italic}
+  @media(max-width:560px){.amb{grid-template-columns:1fr}}
+  .cmp tr.mal{background:#fadbd8}.cmp tr.bien{background:var(--verde-bg)}
+  .cmp-tabla{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:6px}
+  .cmp-tabla th,.cmp-tabla td{border:1px solid var(--linea);padding:4px 8px;text-align:left}
+  .cmp-tabla th{background:var(--claro);color:var(--azul)}
+</style>
+</head>
+<body>
+<div class="marca">
+  <img class="logo-cbtis" src="data:image/png;base64,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" alt="CBTis 236 — Un motivo de orgullo">
+  <span class="marca-texto"><span class="marca-nombre">Mtro. Normando Alán Ramírez Delgado</span>Academia de Programación e Inteligencia Artificial</span>
+</div>
+<header>
+  <h1>Funciones en Python</h1>
+  <p>Prueba cada idea con una función de verdad y mira, paso a paso, qué hace Python antes de escribir tu propio código.</p>
+</header>
+
+<main class="contenedor">
+
+  <section class="card intro">
+    <div>
+      <h2>¿Qué es una función?</h2>
+      <p>Piensa en una <strong>receta con nombre</strong> 📖: la escribes una sola vez y la usas cuantas veces quieras. Una función es un <strong>bloque de código con nombre</strong> que se <strong>define</strong> una vez con <code>def</code> y se <strong>llama</strong> escribiendo su nombre con paréntesis. Puede <strong>recibir datos</strong> (parámetros) y <strong>devolver un resultado</strong> (<code>return</code>).</p>
+      <p><strong>Así se escribe una función:</strong> la palabra <code>def</code>, el <strong>nombre</strong>, los <strong>paréntesis</strong> (con los parámetros adentro, si los hay), dos puntos <code>:</code> y el <strong>cuerpo indentado</strong>. Lo indentado es lo que se ejecuta cada vez que la llamas.</p>
+      <pre class="codigo" id="introCodigo"></pre>
+      <p><strong>¿Por qué importan?</strong> Evitan repetir código y lo hacen más ordenado. En Tkinter, cada botón ejecuta una función cuando lo presionas, así que dominarlas es preparación directa para ese framework.</p>
+      <p><strong>Cómo usar esta página:</strong> 1) elige un tema, 2) cambia los datos, 3) pulsa <em>Ejecutar</em> y observa la animación paso a paso y la explicación. Equivócate a propósito: verás los errores reales de Python.</p>
+    </div>
+    <div>
+      <h3>Colores de los pasos</h3>
+      <div class="leyenda">
+        <span><i style="background:#f4effb;border-color:#6c3fb5"></i>definir (def)</span>
+        <span><i style="background:#eaf2f8;border-color:var(--azul2)"></i>llamada</span>
+        <span><i style="background:#fff9dc;border-color:#e0a800"></i>se ejecuta</span>
+        <span><i style="background:var(--verde-bg);border-color:#27ae60"></i>sale en pantalla</span>
+        <span><i style="background:var(--naranja-bg);border-color:#e67e22"></i>return / termina</span>
+        <span><i style="background:#fadbd8;border-color:var(--acento)"></i>error</span>
+        <span><i style="background:#f3f3f3;border-color:#bbb"></i>no se ejecuta</span>
+      </div>
+      <h3 style="margin-top:14px">print frente a return</h3>
+      <table class="cmp-tabla">
+        <tr><th></th><th>print()</th><th>return</th></tr>
+        <tr><td>¿Muestra en pantalla?</td><td>Sí</td><td>No</td></tr>
+        <tr><td>¿Devuelve un valor?</td><td>No (devuelve None)</td><td>Sí</td></tr>
+        <tr><td>¿Se puede guardar o usar?</td><td>No</td><td>Sí</td></tr>
+        <tr><td>Se usa para</td><td>Mostrar al usuario</td><td>Calcular algo</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <div class="voz" id="voz">
+    <label><input type="checkbox" id="vozOn" checked> 🔊 Explicar con voz</label>
+    <label>Voz <select id="vozSel" aria-label="Elegir voz"></select></label>
+    <label>Velocidad <input type="range" id="vozVel" min="0.7" max="1.3" step="0.05" value="0.95"></label>
+    <button type="button" id="vozRepetir">🔁 Repetir explicación</button>
+    <button type="button" id="vozCallar">⏹ Callar</button>
+    <span class="nota-voz" id="vozNota"></span>
+  </div>
+
+  <nav class="ops" id="ops" aria-label="Temas de funciones"></nav>
+
+  <section class="panel">
+    <div class="card" style="margin:0">
+      <h2 id="opTitulo"></h2>
+      <p id="opResumen" style="margin:0 0 4px"></p>
+      <div id="campos"></div>
+      <div class="ayuda" style="margin-top:8px">Así se escribe en Python:</div>
+      <pre class="codigo" id="codigo"></pre>
+      <button class="ejecutar" id="ejecutar" type="button">▶ Ejecutar</button>
+    </div>
+    <div>
+      <div class="estado mono" id="estado"></div>
+      <div class="escenario" id="stage"></div>
+      <div id="resWrap"></div>
+      <div class="explica" id="explica" aria-live="polite"></div>
+      <div class="card consola-card">
+        <div class="consola-h">
+          <h2>Consola de Python (lo que has ejecutado)</h2>
+          <button id="limpiarCons" type="button">Limpiar</button>
+        </div>
+        <pre class="consola" id="cons" aria-label="Historial de la consola"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:16px" id="autoprueba">
+    <h2 id="quizTitulo">Autoprueba rápida</h2>
+    <p style="margin:0 0 4px">Estas preguntas cambian según el tema que estés viendo. Responde sin ejecutar nada; si dudas, prueba arriba y vuelve. <span id="puntaje"></span></p>
+    <div id="quiz"></div>
+  </section>
+
+</main>
+<footer>Material de apoyo · CBTis 236 · Academia de Programación e Inteligencia Artificial. Todo se ejecuta en tu navegador; no se guarda nada.</footer>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s){ return document.querySelector(s); };
+  var esc = function(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
+  var timer = null, op = null, vistaTimer = null;
+
+  /* ---------- utilidades de formato ---------- */
+  var py = function(v){ return typeof v === "number" ? String(v) : '"' + v + '"'; };
+  var pyF = function(x){ return Number.isInteger(x) ? x.toFixed(1) : String(x); };       /* un float como lo imprime Python */
+  function parseVal(t){
+    t = (t || "").trim();
+    if(!t) throw { ui:"Escribe un valor." };
+    var m = t.match(/^(["'])(.*)\1$/);
+    if(m) return m[2];
+    if(/^-?\d+(\.\d+)?$/.test(t)) return Number(t);
+    return t;
+  }
+  function parseEntero(t, nombre){
+    t = (t == null ? "" : String(t)).trim();
+    if(!/^-?\d+$/.test(t)) throw { ui:"«" + nombre + "» debe ser un número entero (por ejemplo 3, 10 o -2)." };
+    return parseInt(t, 10);
+  }
+  function parseNum(t, nombre){
+    var x = parseVal(t);
+    if(typeof x !== "number") throw { ui:"«" + nombre + "» debe ser un número (por ejemplo 3 o 2.5)." };
+    return x;
+  }
+  var raw = function(t){ try { return py(parseVal(t)); } catch(e){ return "…"; } };
+  var ri  = function(t){ t = (t || "").trim(); return t === "" ? "…" : t; };
+  var q   = function(t){ t = (t || "").trim().replace(/^(["'])(.*)\1$/, "$2"); return '"' + (t || "…") + '"'; };
+  function txt(t){
+    t = (t || "").trim().replace(/^(["'])(.*)\1$/, "$2");
+    if(!t) throw { ui:"Escribe un texto." };
+    if(/["\\]/.test(t)) throw { ui:"Para este ejemplo evita las comillas dobles y la diagonal invertida dentro del texto." };
+    return t;
+  }
+  var items = function(t){ return (t || "").split(",").map(function(x){ return x.trim(); }).filter(function(x){ return x; }); };
+  var sv = function(v){ return typeof v === "number" ? String(v) : v; };      /* lo que imprime print() */
+
+  var RX = /(f?"[^"]*")|(#.*)|\b(def|return|global|if|else|elif|for|in|print|type|min|max|sum|len|None|True|False)\b|(\b\d+(?:\.\d+)?\b)/g;
+  function hl(code){
+    return esc(code).replace(RX, function(m, s, c, k, n){
+      if(s) return '<span class="s">' + s + '</span>';
+      if(c) return '<span class="c">' + c + '</span>';
+      if(k) return '<span class="k">' + k + '</span>';
+      return '<span class="n">' + n + '</span>';
+    });
+  }
+  var RESERVADAS = ["for","in","if","else","elif","while","def","class","return","import","from","as","and","or","not","is","None","True","False","try","except","pass","break","continue","lambda","global","with","yield","del","raise","assert","finally","nonlocal","print"];
+  function validarNombre(nom, ayudaExtra){
+    if(!/^[A-Za-z_][A-Za-z0-9_]*$/.test(nom)) throw { ui:"El nombre «" + nom + "» no es válido: solo puede tener letras sin acentos, números y guion bajo (_), y no puede empezar con un número." + (ayudaExtra || "") };
+    if(RESERVADAS.indexOf(nom) >= 0) throw { ui:"«" + nom + "» es una palabra reservada de Python; elige otro nombre." };
+  }
+
+  /* ---------- dibujo: máquina, ámbitos y traza paso a paso ---------- */
+  function maq(ent, sig, sal, etSal){
+    var h = '<div class="maq"><div class="ent"><span class="etiq">entra (argumentos)</span>' +
+      (ent.length ? ent.map(function(e){ return '<span class="chip">' + esc(e) + "</span>"; }).join("") : '<span class="chip vacio">nada</span>') +
+      '</div><div class="flecha">➜</div><div class="fn"><small>función</small>' + esc(sig) + '</div><div class="flecha">➜</div>' +
+      '<div class="sal"><span class="etiq">' + esc(etSal || "devuelve (return)") + '</span><span class="chip ' + (sal === "None" ? "none" : "ok") + '">' + esc(sal) + "</span></div></div>";
+    return h;
+  }
+  function amb(glob, loc, tituloLoc){
+    function zona(cls, titulo, vars, vacio){
+      return '<div class="zona ' + cls + '"><h4>' + titulo + "</h4>" +
+        (vars.length ? vars.map(function(x){ return '<span class="var ' + (x[2] || "") + '">' + esc(x[0]) + " = " + esc(x[1]) + "</span>"; }).join("") : '<span class="vaciaz">' + vacio + "</span>") + "</div>";
+    }
+    return '<div class="amb">' + zona("glob", "🌍 Ámbito global (todo el programa)", glob, "sin variables globales") +
+      zona("loc", "🏠 " + (tituloLoc || "Ámbito local (dentro de la función)"), loc, "no hay función ejecutándose") + "</div>";
+  }
+  function traza(p){
+    var ol = $("#traza"); if(!ol) return;
+    ol.innerHTML = p.map(function(s){ return '<li class="' + s[0] + '"><span class="ic">' + s[1] + "</span><span>" + s[2] + "</span></li>"; }).join("");
+    var li = ol.children, n = 0;
+    function sig(){ if(n < li.length){ li[n].classList.add("ver"); n++; } else { clearInterval(timer); timer = null; } }
+    sig(); timer = setInterval(sig, 650);
+  }
+  function escena(fig, pasos){
+    $("#stage").innerHTML = (fig || "") + '<div class="ayuda-traza">Paso a paso, lo que hace Python:</div><ol class="traza" id="traza"></ol>';
+    traza(pasos || []);
+  }
+  function estado(t){ $("#estado").innerHTML = '<span>' + hl(t) + '</span><span class="tag-mem">🧠 memoria</span>'; }
+  var limpiarRes = function(){ $("#resWrap").innerHTML = ""; };
+  function tabla(titulo, filas){
+    $("#resWrap").innerHTML = '<div class="res"><h3>' + esc(titulo) + '</h3><table class="cmp">' +
+      filas.map(function(r){ return '<tr class="' + (r[2] || "") + '"><td>' + esc(r[0]) + "</td><td>→</td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</table></div>";
+  }
+  function inicial(){
+    $("#stage").innerHTML = '<div class="pista">Aquí verás una <b>animación paso a paso</b> de lo que hace Python. Elige los datos y pulsa <b>▶ Ejecutar</b>.</div>';
+    estado("# aún no ejecutaste nada");
+  }
+
+  /* ---------- voz (Web Speech API del navegador, sin internet si el sistema trae voces) ---------- */
+  var SS = ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) ? window.speechSynthesis : null;
+  var voces = [], ultimaVoz = "";
+  function pronunciar(h){
+    var d = document.createElement("div"); d.innerHTML = h;
+    return d.textContent
+      .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, "")
+      .replace(/["“”]/g, "")
+      .replace(/_/g, " ")
+      .replace(/\(\)/g, "")
+      .replace(/\[::-1\]/g, " corchete dos puntos dos puntos menos uno ")
+      .replace(/-(\d)/g, "menos $1")
+      .replace(/\s=\s/g, " igual a ")
+      .replace(/\s\+\s/g, " más ")
+      .replace(/\s\*\s/g, " por ")
+      .replace(/[\[\]{}]/g, " ")
+      .replace(/…/g, ".")
+      .replace(/\s+/g, " ").trim();
+  }
+  var hTimer = null;
+  function hablar(texto, forzar, sinVoz){
+    if(!SS || (!forzar && !$("#vozOn").checked) || !texto) return;
+    SS.cancel(); clearTimeout(hTimer);
+    var sel = $("#vozSel").value, v = sinVoz ? null : voces.filter(function(x){ return x.voiceURI === sel; })[0];
+    var u = new SpeechSynthesisUtterance(texto);
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = "es-MX"; }
+    u.rate = parseFloat($("#vozVel").value) || 0.95;
+    u.pitch = (v && generoVoz(v.name) !== "o") ? 1.1 : 1;   /* un poco más agudo: suena más joven */
+    var arranco = false;
+    u.onstart = function(){ arranco = true; if(/^La voz/.test($("#vozNota").textContent)) $("#vozNota").textContent = ""; };
+    u.onerror = function(e){
+      if(e.error === "canceled" || e.error === "interrupted") return;
+      if(v){ $("#vozNota").textContent = "La voz «" + baseVoz(v.name) + "» no respondió; se usó la voz predeterminada. Prueba con otra de la lista."; hablar(texto, true, true); }
+    };
+    /* pequeña pausa tras cancel(): sin ella Chrome/Safari a veces ignoran el speak() siguiente */
+    hTimer = setTimeout(function(){
+      if(SS.paused) SS.resume();
+      SS.speak(u);
+      setTimeout(function(){ if(!arranco && v && !SS.speaking){ $("#vozNota").textContent = "La voz «" + baseVoz(v.name) + "» no produjo sonido. Prueba con otra de la lista."; } }, 2500);
+    }, 90);
+  }
+  var HOMBRES = ["eddy","reed","rocko","grandpa","jorge","juan","diego","carlos","pablo","raul","raúl","alvaro","álvaro","enrique","miguel","tomas","tomás","jaime","andres","andrés","gonzalo","ricardo","alberto","fernando","pedro","luis","antonio","arnau","tito","kike"];
+  var MUJERES = ["paulina","flo","sandy","shelley","grandma","mónica","monica","marisol","angélica","angelica","francisca","soledad","luciana","sabina","helena","laura","elena","dalia","elvira","paloma","ximena","lupe","camila","maría","maria","paola","valentina","catalina","isabela","alba","abril","triana","lía","lia","jimena","marina"];
+  function baseVoz(n){ return n.split(/ \(| - /)[0].replace(/^(microsoft|google)\s+/i, "").trim(); }
+  function generoVoz(n){
+    var p = baseVoz(n).toLowerCase().split(/\s+/)[0];
+    return HOMBRES.indexOf(p) >= 0 ? "h" : (MUJERES.indexOf(p) >= 0 ? "m" : "o");
+  }
+  function cargarVoces(){
+    if(!SS) return;
+    var nVoces = SS.getVoices().length;
+    if(cargarVoces.listo && nVoces === cargarVoces.total) return;      /* nada nuevo: no reconstruir la lista */
+    cargarVoces.listo = true; cargarVoces.total = nVoces;
+    var orden = ["es-MX", "es-US", "es-419", "es-ES"];
+    var prio = function(v){ var i = orden.indexOf(v.lang.replace("_", "-")); return i < 0 ? 9 : i; };
+    var mejor = {};                      /* una sola voz por nombre (la de mejor acento) */
+    SS.getVoices().filter(function(v){ return /^es/i.test(v.lang); }).forEach(function(v){
+      var k = baseVoz(v.name).toLowerCase();
+      if(!mejor[k] || prio(v) < prio(mejor[k])) mejor[k] = v;
+    });
+    var es = Object.keys(mejor).map(function(k){ return mejor[k]; });
+    var preferidas = ["flo", "sandy", "shelley", "paulina", "sabina", "dalia", "mónica", "monica", "helena", "elvira"];
+    var pref = function(v){ var i = preferidas.indexOf(baseVoz(v.name).toLowerCase()); return i < 0 ? 99 : i; };
+    es.sort(function(a, b){ return pref(a) - pref(b) || prio(a) - prio(b) || baseVoz(a.name).localeCompare(baseVoz(b.name), "es"); });
+    /* solo 3 voces de mujer; si no se identifica ninguna, se ofrecen hasta 3 de género desconocido (nunca las de hombre) */
+    var mujeres = es.filter(function(v){ return generoVoz(v.name) === "m"; });
+    var otras = es.filter(function(v){ return generoVoz(v.name) === "o"; });
+    voces = (mujeres.length ? mujeres : otras).slice(0, 3);
+    var sel = $("#vozSel"), actual = sel.value;
+    sel.innerHTML = voces.length ? voces.map(function(v){ return '<option value="' + esc(v.voiceURI) + '">' + esc(baseVoz(v.name) + " (" + v.lang.replace("_", "-") + ")") + "</option>"; }).join("") : '<option value="">Voz predeterminada</option>';
+    if(actual && voces.some(function(v){ return v.voiceURI === actual; })) sel.value = actual;
+    $("#vozNota").textContent = voces.length ? "" : (es.length ? "No encontré voces de mujer en español en este navegador; se usa la voz predeterminada." : "Tu dispositivo no tiene voz en español instalada; puede sonar con acento extraño.");
+  }
+  function explica(h, mudo){
+    $("#explica").innerHTML = h;
+    if(!mudo){ ultimaVoz = pronunciar(h); hablar(ultimaVoz); }
+  }
+  function iniciarVoz(){
+    if(!SS){ $("#voz").innerHTML = '<span class="nota-voz">Tu navegador no admite voz; usa Chrome, Edge o Safari actualizados para escuchar las explicaciones.</span>'; return; }
+    cargarVoces();
+    if(SS.addEventListener) SS.addEventListener("voiceschanged", cargarVoces);
+    SS.onvoiceschanged = cargarVoces;
+    /* algunos navegadores entregan las voces con retraso y sin avisar: se reintenta unos segundos */
+    var intentos = 0, reintento = setInterval(function(){ intentos++; cargarVoces(); if(intentos > 30) clearInterval(reintento); }, 500);
+    $("#voz").addEventListener("pointerdown", function(){ cargarVoces(); });
+    $("#vozOn").addEventListener("change", function(){ if(!this.checked) SS.cancel(); else hablar(ultimaVoz); });
+    $("#vozRepetir").addEventListener("click", function(){ hablar(ultimaVoz, true); });
+    $("#vozCallar").addEventListener("click", function(){ SS.cancel(); });
+    $("#vozSel").addEventListener("change", function(){ hablar("Esta es la voz seleccionada.", true); });
+  }
+
+  var lineasCons = [];
+  function cons(texto, tipo){
+    if(tipo === "in"){
+      String(texto).split("\n").forEach(function(l, i){
+        lineasCons.push('<span class="p">' + (i === 0 ? ">>> " : "... ") + '</span>' + hl(l));
+      });
+    } else {
+      lineasCons.push('<span class="' + tipo + '">' + esc(texto) + '</span>');
+    }
+    var c = $("#cons");
+    c.innerHTML = lineasCons.join("\n");
+    c.scrollTop = c.scrollHeight;
+  }
+  function detener(){ if(timer){ clearInterval(timer); timer = null; } }
+
+  /* muestra un resultado completo: consola + animación + explicación */
+  function mostrar(o){
+    cons(o.codigo, "in");
+    (o.sal || []).forEach(function(s){ cons(s, "out"); });
+    if(o.nota) cons(o.nota, "nota");
+    escena(o.fig, o.pasos);
+    if(o.estado) estado(o.estado);
+    if(o.tabla) tabla(o.tabla[0], o.tabla[1]);
+    explica(o.ex);
+  }
+  var tipoNum = function(x){ return Number.isInteger(x) ? "int" : "float"; };
+  var MEM = "0x7f3a1c2d5e40";
+
+  /* ---------- operaciones ---------- */
+  var OPS_BASE = [
+
+  { id:"definir", ico:"📖", t:"Definir y llamar una función (def)",
+    res:"Con def solo guardas la función en la memoria, como escribir una receta en un libro. No se ejecuta hasta que la llamas con su nombre y paréntesis.",
+    campos:[{ id:"nombre", label:"Nombre de la función", tipo:"txt", def:"mostrar_bienvenida", ph:"mostrar_bienvenida, saludar…", ayuda:"Solo letras, números y guion bajo (_). Por costumbre se escribe en minúsculas." },
+            { id:"msg", label:"Texto que mostrará la función", tipo:"txt", def:"Bienvenido al sistema", ph:"cualquier texto" },
+            { id:"modo", label:"¿Qué quieres hacer?", tipo:"sel", def:"uno", opciones:[["uno","Definir y llamar una vez"],["dos","Definir y llamar dos veces"],["solodef","⚠ Solo definir (sin llamar)"],["antes","⚠ Llamar antes de definir"],["sinpar","⚠ Escribir el nombre sin paréntesis"]] }],
+    codigo:function(v){
+      var N = (v.nombre || "").trim() || "…", M = q(v.msg), d = "def " + N + "():\n    print(" + M + ")";
+      if(v.modo === "dos") return d + "\n\n" + N + "()\n" + N + "()";
+      if(v.modo === "solodef") return d;
+      if(v.modo === "antes") return N + "()\n\n" + d;
+      if(v.modo === "sinpar") return d + "\n\n" + N + "      # sin paréntesis";
+      return d + "\n\n" + N + "()";
+    },
+    run:function(v){
+      var N = (v.nombre || "").trim(); validarNombre(N, " Prueba con algo como «mostrar_bienvenida».");
+      var M = txt(v.msg), Me = esc(M), cod = this.codigo(v), pasos = [], sal = [];
+      var fig = function(r){ return maq([], N + "()", r, "devuelve (nada → None)"); };
+      var D = ["def", "📖", "Python lee <code>def " + esc(N) + "():</code> y <b>guarda</b> la función en la memoria. El cuerpo <b>no se ejecuta</b> todavía."];
+      function llamada(n){
+        pasos.push(["call", "📞", "<b>Llamada " + n + ":</b> <code>" + esc(N) + "()</code>. Python salta al cuerpo de la función."]);
+        pasos.push(["run", "▶", "Se ejecuta la línea <code>print(\"" + Me + "\")</code>."]);
+        pasos.push(["out", "🖨️", "Sale en pantalla: <b>" + Me + "</b>"]);
+        pasos.push(["ret", "↩️", "El cuerpo termina y Python <b>regresa</b> a la línea que hizo la llamada."]);
+        sal.push(M);
+      }
+      if(v.modo === "antes"){
+        throw { py:"NameError: name '" + N + "' is not defined",
+          por:"Python lee el programa <b>de arriba hacia abajo</b>. Cuando llegó a <code>" + esc(N) + "()</code>, la función todavía no estaba definida. <b>Primero se define, después se llama.</b>",
+          fig:fig("None"), pasos:[["call", "📞", "Python llega a la llamada <code>" + esc(N) + "()</code> en la primera línea."], ["err", "❌", "Busca <b>" + esc(N) + "</b> en la memoria y no existe: todavía no leyó el <code>def</code>."]] };
+      }
+      pasos.push(D);
+      if(v.modo === "solodef"){
+        pasos.push(["skip", "🚫", "Fin del programa. Nadie llamó a <code>" + esc(N) + "()</code>, así que <b>no se imprimió nada</b>."]);
+        mostrar({ codigo:cod, nota:"# (sin salida: la función nunca se llamó)", fig:fig("None"), pasos:pasos, estado:"def " + N + "():   # guardada, sin usar",
+          ex:"Solo <b>definiste</b> la función: quedó guardada en la memoria pero <b>no se ejecutó nada</b>, por eso la consola no mostró ninguna salida. Definir es como escribir la receta; para cocinar hay que <b>llamarla</b>: <code>" + esc(N) + "()</code>." });
+        return;
+      }
+      if(v.modo === "sinpar"){
+        pasos.push(["skip", "🚫", "La línea <code>" + esc(N) + "</code> solo <b>menciona</b> la función. Sin paréntesis no hay llamada, así que el cuerpo no corre."]);
+        mostrar({ codigo:cod, nota:"# (sin salida: faltaron los paréntesis de la llamada)", fig:fig("None"), pasos:pasos, estado:"def " + N + "():   # guardada, sin usar",
+          ex:"Escribir <code>" + esc(N) + "</code> sin paréntesis <b>no llama</b> a la función: solo se refiere a ella. Lo que ejecuta el cuerpo son los paréntesis: <code>" + esc(N) + "()</code>. Es uno de los olvidos más comunes al empezar." });
+        return;
+      }
+      llamada(1);
+      if(v.modo === "dos") llamada(2);
+      mostrar({ codigo:cod, sal:sal, fig:fig("None"), pasos:pasos, estado:"def " + N + "():   # llamada " + (v.modo === "dos" ? "2 veces" : "1 vez"),
+        ex:v.modo === "dos"
+          ? "Definiste la función <b>una sola vez</b> y la llamaste <b>dos veces</b>: el mismo cuerpo se ejecutó dos veces. Esa es la gran ventaja de una función: <b>escribes el código una vez y lo reutilizas</b> cuantas veces quieras."
+          : "Primero <code>def</code> <b>guardó</b> la función y después la llamada <code>" + esc(N) + "()</code> hizo que el cuerpo <b>se ejecutara</b>. Fíjate en las piezas: <code>def</code>, el nombre, los paréntesis, los dos puntos y el cuerpo <b>indentado</b>." });
+    } },
+
+  { id:"mostrar", ico:"🖨️", t:"print: la función, su llamada o su resultado",
+    res:"No es lo mismo imprimir la función, llamarla o imprimir lo que devuelve. Compara qué sale en pantalla en cada caso.",
+    campos:[{ id:"modo", label:"¿Qué escribes?", tipo:"sel", def:"imprimir", opciones:[["imprimir","print(doble(numero))  — imprimir el resultado"],["obj","print(doble)  — la función, sin paréntesis"],["llamar","doble(numero)  — llamar sin print"],["tipo","print(type(doble))  — el tipo de dato"]] },
+            { id:"n", label:"Número que se envía", tipo:"txt", def:"4", ph:"un número entero", si:function(v){ return v.modo === "imprimir" || v.modo === "llamar"; } }],
+    codigo:function(v){
+      var d = "def doble(numero):\n    return numero * 2\n\n";
+      if(v.modo === "obj") return d + "print(doble)";
+      if(v.modo === "llamar") return d + "doble(" + ri(v.n) + ")";
+      if(v.modo === "tipo") return d + "print(type(doble))";
+      return d + "print(doble(" + ri(v.n) + "))";
+    },
+    run:function(v){
+      var cod = this.codigo(v), n = 0, pasos = [["def", "📖", "<code>def doble(numero):</code> se guarda en la memoria (todavía no se ejecuta)."]], sal = [], ex, fig, nota;
+      if(v.modo === "obj" || v.modo === "tipo"){
+        var esObj = v.modo === "obj";
+        pasos.push(["run", "▶", esObj ? "<code>print(doble)</code>: no hay paréntesis de llamada, así que <b>no se ejecuta</b> la función; <code>print</code> recibe la función misma como objeto." : "<code>type(doble)</code> pregunta de qué tipo es <b>doble</b>: es una función."]);
+        pasos.push(["out", "🖨️", esObj ? "Sale una descripción de la función, no un resultado: <b>&lt;function doble at " + MEM + "&gt;</b>" : "Sale: <b>&lt;class 'function'&gt;</b>"]);
+        sal.push(esObj ? "<function doble at " + MEM + ">" : "<class 'function'>");
+        fig = maq([], "doble(numero)", "sin llamar", "no se ejecutó");
+        ex = esObj ? "Sin paréntesis, <code>doble</code> es <b>la función como objeto</b>, no su resultado. Python muestra algo como <code>&lt;function doble at 0x…&gt;</code> (la dirección cambia en cada computadora). <b>Para ejecutarla necesitas los paréntesis</b>: <code>doble(4)</code>."
+                   : "En Python las funciones también son un tipo de dato: <code>type(doble)</code> da <code>&lt;class 'function'&gt;</code>. Por eso <code>doble</code> (la función) y <code>doble(4)</code> (su resultado) son cosas distintas.";
+      } else {
+        n = parseNum(v.n, "Número"); var r = n * 2;
+        pasos.push(["call", "📞", "<code>doble(" + n + ")</code>: el argumento <b>" + n + "</b> se copia en el parámetro <code>numero</code>."]);
+        pasos.push(["run", "▶", "<code>return numero * 2</code> calcula <b>" + r + "</b> y lo <b>devuelve</b> a quien llamó."]);
+        fig = maq([String(n)], "doble(numero)", String(r));
+        if(v.modo === "imprimir"){
+          pasos.push(["out", "🖨️", "<code>print(…)</code> recibe " + r + " y lo muestra: <b>" + r + "</b>"]); sal.push(String(r));
+          ex = "<code>doble(" + n + ")</code> <b>devuelve</b> " + r + " y <code>print()</code> lo <b>muestra</b>. Dos trabajos distintos: la función calcula, <code>print</code> enseña el resultado.";
+        } else {
+          pasos.push(["skip", "🚫", "Nadie usó el valor devuelto: <b>" + r + "</b> se calculó y se perdió. No se imprime nada."]);
+          nota = "# (sin salida: calculó " + r + " pero nadie lo mostró)";
+          ex = "En un programa (archivo .py), llamar a <code>doble(" + n + ")</code> <b>sin print</b> calcula " + r + " pero no lo muestra. Si quieres verlo escribe <code>print(doble(" + n + "))</code>; si quieres usarlo, guárdalo: <code>resultado = doble(" + n + ")</code>. <i>(Solo en la consola interactiva de Python se ve el valor sin print.)</i>";
+        }
+      }
+      mostrar({ codigo:cod, sal:sal, nota:nota, fig:fig, pasos:pasos, ex:ex, estado:"def doble(numero):   # en memoria",
+        tabla:["Las cuatro formas, lado a lado", [["print(doble)", "<function doble at 0x…>   (la función, sin ejecutar)", v.modo === "obj" ? "sel" : ""], ["doble(4)", "(en un programa no muestra nada)", v.modo === "llamar" ? "sel" : ""], ["print(doble(4))", "8   (el resultado)", v.modo === "imprimir" ? "sel" : ""], ["print(type(doble))", "<class 'function'>", v.modo === "tipo" ? "sel" : ""]]] });
+    } },
+
+  { id:"params", ico:"🎯", t:"Parámetros y argumentos (uno solo)",
+    res:"El parámetro es la variable que escribes al definir la función; el argumento es el valor concreto que envías al llamarla. Así la misma función sirve para datos distintos.",
+    campos:[{ id:"nombre", label:"Nombre de la función", tipo:"txt", def:"saludar", ph:"saludar…" },
+            { id:"param", label:"Nombre del parámetro", tipo:"txt", def:"nombre", ph:"nombre, persona…" },
+            { id:"args", label:"Argumentos (una llamada por cada uno, separados por comas)", tipo:"txt", def:"Ana, Luis, Profe", ph:"Ana, Luis", ayuda:"Se hará una llamada por cada valor (máximo 4)." },
+            { id:"modo", label:"¿Cómo llamas?", tipo:"sel", def:"ok", opciones:[["ok","Con un argumento (correcto)"],["falta","⚠ Sin argumento"],["sobra","⚠ Con dos argumentos"]] }],
+    codigo:function(v){
+      var N = (v.nombre || "").trim() || "…", P = (v.param || "").trim() || "…", a = items(v.args).map(raw);
+      var d = "def " + N + "(" + P + "):\n    print(f\"¡Hola, {" + P + "}! Bienvenido.\")\n\n";
+      if(v.modo === "falta") return d + N + "()";
+      if(v.modo === "sobra") return d + N + "(" + (a[0] || "…") + ", \"extra\")";
+      return d + (a.length ? a : ["…"]).slice(0, 4).map(function(x){ return N + "(" + x + ")"; }).join("\n");
+    },
+    run:function(v){
+      var N = (v.nombre || "").trim(), P = (v.param || "").trim(); validarNombre(N); validarNombre(P);
+      var a = items(v.args).map(parseVal); if(!a.length) throw { ui:"Escribe al menos un argumento." };
+      a = a.slice(0, 4); var cod = this.codigo(v), pasos = [["def", "📖", "<code>def " + esc(N) + "(" + esc(P) + "):</code> se guarda. <b>" + esc(P) + "</b> es el <b>parámetro</b>."]];
+      if(v.modo === "falta"){
+        throw { py:"TypeError: " + N + "() missing 1 required positional argument: '" + P + "'",
+          por:"La función espera <b>un dato</b> (<code>" + esc(P) + "</code>) y la llamaste con los paréntesis vacíos. Cada parámetro sin valor por defecto es <b>obligatorio</b>.",
+          fig:maq([], N + "(" + P + ")", "—", "no llegó a ejecutarse"), pasos:pasos.concat([["call", "📞", "Llamada <code>" + esc(N) + "()</code> sin argumentos."], ["err", "❌", "A <code>" + esc(P) + "</code> no le llegó ningún valor y no tiene uno por defecto."]]) };
+      }
+      if(v.modo === "sobra"){
+        throw { py:"TypeError: " + N + "() takes 1 positional argument but 2 were given",
+          por:"La función tiene <b>un</b> parámetro pero le enviaste <b>dos</b> argumentos. Deben coincidir en cantidad (salvo que haya valores por defecto).",
+          fig:maq([py(a[0]), '"extra"'], N + "(" + P + ")", "—", "no llegó a ejecutarse"), pasos:pasos.concat([["call", "📞", "Llamada con <b>2 argumentos</b>."], ["err", "❌", "Solo hay un parámetro para recibirlos."]]) };
+      }
+      var sal = [];
+      a.forEach(function(x, i){
+        pasos.push(["call", "📞", "<b>Llamada " + (i + 1) + ":</b> <code>" + esc(N) + "(" + esc(py(x)) + ")</code> → el argumento <b>" + esc(py(x)) + "</b> se copia en <code>" + esc(P) + "</code>."]);
+        pasos.push(["out", "🖨️", "Sale: <b>¡Hola, " + esc(sv(x)) + "! Bienvenido.</b>"]);
+        sal.push("¡Hola, " + sv(x) + "! Bienvenido.");
+      });
+      var u = a[a.length - 1];
+      mostrar({ codigo:cod, sal:sal, fig:maq([py(u)], N + "(" + P + ")", "None"), pasos:pasos, estado:"def " + N + "(" + P + "):   # parámetro: " + P,
+        tabla:["Parámetro frente a argumento", [[P + "  (en def)", "el parámetro: la variable que espera el dato", "sel"], [py(u) + "  (en la llamada)", "el argumento: el dato concreto que se envía", "bien"]]],
+        ex:"<b>" + esc(P) + "</b> es el <b>parámetro</b> (como el ingrediente de una receta) y " + a.map(function(x){ return "<b>" + esc(py(x)) + "</b>"; }).join(", ") + " " + (a.length > 1 ? "son los <b>argumentos</b>" : "es el <b>argumento</b>") + ". La función es <b>una sola</b>, pero cada llamada la ejecutó con un dato distinto." });
+    } },
+
+  { id:"varios", ico:"🎛️", t:"Varios parámetros: el orden importa",
+    res:"Una función puede recibir varios datos separados por comas. Los argumentos se asignan por posición: el primero al primer parámetro, el segundo al segundo… y deben coincidir en cantidad.",
+    campos:[{ id:"a1", label:"Primer argumento (nombre)", tipo:"txt", def:"Ana", ph:"texto" },
+            { id:"a2", label:"Segundo argumento (edad)", tipo:"txt", def:"16", ph:"número" },
+            { id:"modo", label:"¿Cómo llamas?", tipo:"sel", def:"ok", opciones:[["ok","En el orden correcto"],["orden","⚠ En orden cambiado"],["falta","⚠ Falta un argumento"],["sobra","⚠ Sobra un argumento"]] }],
+    codigo:function(v){
+      var d = "def presentar(nombre, edad):\n    print(f\"{nombre} tiene {edad} años\")\n\n", x = raw(v.a1), y = raw(v.a2);
+      if(v.modo === "orden") return d + "presentar(" + y + ", " + x + ")";
+      if(v.modo === "falta") return d + "presentar(" + x + ")";
+      if(v.modo === "sobra") return d + "presentar(" + x + ", " + y + ", \"5A\")";
+      return d + "presentar(" + x + ", " + y + ")";
+    },
+    run:function(v){
+      var x = parseVal(v.a1), y = parseVal(v.a2), cod = this.codigo(v);
+      var pasos = [["def", "📖", "<code>def presentar(nombre, edad):</code> se guarda con <b>dos</b> parámetros."]];
+      if(v.modo === "falta"){
+        throw { py:"TypeError: presentar() missing 1 required positional argument: 'edad'",
+          por:"Enviaste un solo argumento y la función necesita <b>dos</b>. Al <code>nombre</code> le tocó " + esc(py(x)) + " y a <code>edad</code> no le llegó nada.",
+          fig:maq([py(x)], "presentar(nombre, edad)", "—", "no llegó a ejecutarse"), pasos:pasos.concat([["call", "📞", "Llamada con <b>1</b> argumento."], ["err", "❌", "<code>edad</code> se quedó sin valor."]]) };
+      }
+      if(v.modo === "sobra"){
+        throw { py:"TypeError: presentar() takes 2 positional arguments but 3 were given",
+          por:"La función tiene <b>dos</b> parámetros y le enviaste <b>tres</b> argumentos. Sobra uno y Python no sabe dónde guardarlo.",
+          fig:maq([py(x), py(y), '"5A"'], "presentar(nombre, edad)", "—", "no llegó a ejecutarse"), pasos:pasos.concat([["call", "📞", "Llamada con <b>3</b> argumentos."], ["err", "❌", "Solo hay dos parámetros para recibirlos."]]) };
+      }
+      var n1 = v.modo === "orden" ? y : x, e1 = v.modo === "orden" ? x : y;
+      pasos.push(["call", "📞", "Llamada <code>presentar(" + esc(py(n1)) + ", " + esc(py(e1)) + ")</code>."]);
+      pasos.push(["run", "🔗", "Por <b>posición</b>: <code>nombre</code> = <b>" + esc(py(n1)) + "</b> (primero) y <code>edad</code> = <b>" + esc(py(e1)) + "</b> (segundo)."]);
+      var s = sv(n1) + " tiene " + sv(e1) + " años";
+      pasos.push(["out", "🖨️", "Sale: <b>" + esc(s) + "</b>"]);
+      mostrar({ codigo:cod, sal:[s], fig:maq([py(n1), py(e1)], "presentar(nombre, edad)", "None"), pasos:pasos, estado:"def presentar(nombre, edad):   # 2 parámetros",
+        tabla:["Quién recibió qué", [["nombre", py(n1), v.modo === "orden" ? "mal" : "bien"], ["edad", py(e1), v.modo === "orden" ? "mal" : "bien"]]],
+        ex:v.modo === "orden"
+          ? "<b>No hubo error, pero el resultado está mal.</b> Los argumentos se asignan <b>por posición</b>: Python puso " + esc(py(n1)) + " en <code>nombre</code> y " + esc(py(e1)) + " en <code>edad</code>, aunque no tenga sentido. Python no adivina lo que querías; <b>tú</b> debes respetar el orden de los parámetros."
+          : "Los argumentos se asignaron <b>en orden</b>: el primero al primer parámetro y el segundo al segundo. Ese orden es el que escribiste en el <code>def</code>." });
+    } },
+
+  { id:"defecto", ico:"🧩", t:"Valores por defecto y argumentos con nombre",
+    res:"Un parámetro puede traer un valor por defecto: si no envías ese argumento, se usa el valor predeterminado. También puedes enviar los argumentos por su nombre, y entonces el orden ya no importa.",
+    campos:[{ id:"nombre", label:"Nombre de la persona", tipo:"txt", def:"García", ph:"texto" },
+            { id:"titulo", label:"Título (se envía solo en algunos modos)", tipo:"txt", def:"Profesor", ph:"Profesor, Doctora…", si:function(v){ return v.modo === "con" || v.modo === "kw"; } },
+            { id:"modo", label:"¿Cómo llamas?", tipo:"sel", def:"sin", opciones:[["sin","Solo el nombre (usa el valor por defecto)"],["con","Nombre y título (reemplaza el valor por defecto)"],["kw","Con nombres: titulo=…, nombre=… (el orden no importa)"],["mal","⚠ Definir con el parámetro opcional primero"]] }],
+    codigo:function(v){
+      var d = "def saludar_con_titulo(nombre, titulo=\"Alumno\"):\n    print(f\"Bienvenido, {titulo} {nombre}\")\n\n", n = q(v.nombre), t = q(v.titulo);
+      if(v.modo === "con") return d + "saludar_con_titulo(" + n + ", " + t + ")";
+      if(v.modo === "kw") return d + "saludar_con_titulo(titulo=" + t + ", nombre=" + n + ")";
+      if(v.modo === "mal") return "def saludar_con_titulo(titulo=\"Alumno\", nombre):\n    print(f\"Bienvenido, {titulo} {nombre}\")";
+      return d + "saludar_con_titulo(" + n + ")";
+    },
+    run:function(v){
+      var cod = this.codigo(v);
+      if(v.modo === "mal"){
+        throw { py:"SyntaxError: parameter without a default follows parameter with a default",
+          por:"Los parámetros <b>con valor por defecto</b> deben ir <b>al final</b>. Aquí <code>nombre</code> (obligatorio) aparece después de <code>titulo=\"Alumno\"</code> (opcional). Python ni siquiera llega a guardar la función.",
+          fig:maq([], "saludar_con_titulo(titulo=\"Alumno\", nombre)", "—", "no se pudo definir"), pasos:[["err", "❌", "Python revisa la <b>firma</b> de la función antes de guardarla y encuentra los parámetros en un orden imposible."]] };
+      }
+      var n = txt(v.nombre), t = "Alumno", pasos = [["def", "📖", "<code>def saludar_con_titulo(nombre, titulo=\"Alumno\"):</code> se guarda. <b>titulo</b> es opcional: vale \"Alumno\" si no lo envías."]], ent, ex, uso;
+      if(v.modo === "sin"){
+        pasos.push(["call", "📞", "Llamada <code>saludar_con_titulo(\"" + esc(n) + "\")</code>: solo se envía <b>nombre</b>."]);
+        pasos.push(["run", "🧩", "<code>titulo</code> no recibió nada, así que usa su valor por defecto: <b>\"Alumno\"</b>."]);
+        ent = ['"' + n + '"']; uso = "defecto";
+        ex = "Solo enviaste el nombre. Como <code>titulo</code> <b>no recibió argumento</b>, Python usó su <b>valor por defecto</b>, <code>\"Alumno\"</code>.";
+      } else {
+        t = txt(v.titulo);
+        if(v.modo === "con"){
+          pasos.push(["call", "📞", "Llamada <code>saludar_con_titulo(\"" + esc(n) + "\", \"" + esc(t) + "\")</code>: se envían <b>los dos</b> argumentos."]);
+          pasos.push(["run", "🧩", "<code>titulo</code> sí recibió un valor, así que <b>reemplaza</b> al valor por defecto: <b>\"" + esc(t) + "\"</b>."]);
+          ent = ['"' + n + '"', '"' + t + '"']; uso = "reemplazo";
+          ex = "Esta vez enviaste el título, y <b>reemplazó</b> al valor por defecto (\"Alumno\"). El valor por defecto solo se usa cuando el argumento no llega.";
+        } else {
+          pasos.push(["call", "📞", "Llamada <code>saludar_con_titulo(titulo=\"" + esc(t) + "\", nombre=\"" + esc(n) + "\")</code>: cada dato lleva el <b>nombre</b> de su parámetro."]);
+          pasos.push(["run", "🏷️", "Python asigna por <b>nombre</b>, no por posición: <code>titulo</code> = \"" + esc(t) + "\" y <code>nombre</code> = \"" + esc(n) + "\"."]);
+          ent = ['titulo="' + t + '"', 'nombre="' + n + '"']; uso = "kw";
+          ex = "Con <b>argumentos con nombre</b> (<code>titulo=…, nombre=…</code>) el orden ya no importa, porque cada valor indica a qué parámetro pertenece. Hace el código más claro cuando hay varios parámetros.";
+        }
+      }
+      var s = "Bienvenido, " + t + " " + n;
+      pasos.push(["out", "🖨️", "Sale: <b>" + esc(s) + "</b>"]);
+      mostrar({ codigo:cod, sal:[s], fig:maq(ent, "saludar_con_titulo(nombre, titulo=\"Alumno\")", "None"), pasos:pasos, ex:ex, estado:"def saludar_con_titulo(nombre, titulo=\"Alumno\"):",
+        tabla:["Qué valor tomó cada parámetro", [["nombre", '"' + n + '"', "bien"], ["titulo", '"' + t + '"' + (uso === "defecto" ? "   (valor por defecto)" : "   (enviado)"), uso === "defecto" ? "sel" : "bien"]]] });
+    } },
+
+  { id:"retorno", ico:"📤", t:"return: devolver el resultado",
+    res:"print muestra un valor en pantalla y ahí se pierde; return lo devuelve a quien llamó la función para que puedas guardarlo o usarlo en otro cálculo.",
+    campos:[{ id:"a", label:"Primer número", tipo:"txt", def:"3", ph:"un número" },
+            { id:"b", label:"Segundo número", tipo:"txt", def:"4", ph:"un número" },
+            { id:"modo", label:"¿Qué comparas?", tipo:"sel", def:"print", opciones:[["print","Función con print: guardar su resultado"],["return","Función con return: guardar su resultado"],["uso","Función con return: usarla en un cálculo"],["mal","⚠ Función con print: usarla en un cálculo"]] }],
+    codigo:function(v){
+      var a = ri(v.a), b = ri(v.b), dp = "def sumar_con_print(primero, segundo):\n    print(primero + segundo)\n\n", dr = "def sumar(primero, segundo):\n    return primero + segundo\n\n";
+      if(v.modo === "return") return dr + "resultado = sumar(" + a + ", " + b + ")\nprint(resultado)";
+      if(v.modo === "uso") return dr + "print(sumar(" + a + ", " + b + ") * 2)";
+      if(v.modo === "mal") return dp + "print(sumar_con_print(" + a + ", " + b + ") * 2)";
+      return dp + "resultado = sumar_con_print(" + a + ", " + b + ")\nprint(resultado)";
+    },
+    run:function(v){
+      var a = parseNum(v.a, "Primer número"), b = parseNum(v.b, "Segundo número"), s = a + b, cod = this.codigo(v);
+      var conPrint = v.modo === "print" || v.modo === "mal", F = conPrint ? "sumar_con_print" : "sumar";
+      var pasos = [["def", "📖", "<code>def " + F + "(primero, segundo):</code> se guarda."], ["call", "📞", "Llamada <code>" + F + "(" + a + ", " + b + ")</code>: primero = <b>" + a + "</b>, segundo = <b>" + b + "</b>."]];
+      if(conPrint){
+        pasos.push(["out", "🖨️", "<code>print(primero + segundo)</code> <b>muestra " + s + "</b> en pantalla…"]);
+        pasos.push(["ret", "↩️", "…pero la función <b>no tiene return</b>, así que devuelve <b>None</b> (nada). El " + s + " ya no se puede recuperar."]);
+        if(v.modo === "mal"){
+          pasos.push(["err", "❌", "Python intenta calcular <code>None * 2</code>: no se puede multiplicar <b>nada</b> por un número."]);
+          throw { py:"TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'", sal:[String(s)],
+            por:"La función solo <b>mostró</b> " + s + " con <code>print</code>, pero <b>no lo devolvió</b>: lo que recibió el <code>* 2</code> fue <b>None</b>. Para poder usar el resultado en otra operación, la función debe terminar con <code>return</code>.",
+            fig:maq([String(a), String(b)], F + "(primero, segundo)", "None"), pasos:pasos };
+        }
+        pasos.push(["run", "💾", "<code>resultado = None</code>: se guardó la nada que devolvió la función."]);
+        pasos.push(["out", "🖨️", "<code>print(resultado)</code> muestra: <b>None</b>"]);
+        mostrar({ codigo:cod, sal:[String(s), "None"], fig:maq([String(a), String(b)], F + "(primero, segundo)", "None"), pasos:pasos, estado:"resultado = None   # la función no devolvió nada",
+          tabla:["print frente a return", [["print(primero + segundo)", "muestra " + s + " en pantalla, pero el valor desaparece", "mal"], ["return primero + segundo", "devuelve " + s + " para guardarlo o usarlo", "bien"]]],
+          ex:"La consola mostró <b>dos líneas</b>: el <b>" + s + "</b> salió del <code>print</code> de <b>dentro</b> de la función, y el <b>None</b> salió del <code>print(resultado)</code> de afuera. Como la función solo mostró el valor y no lo <b>devolvió</b>, <code>resultado</code> quedó vacío (<code>None</code>)." });
+        return;
+      }
+      pasos.push(["ret", "↩️", "<code>return primero + segundo</code> calcula <b>" + s + "</b> y lo <b>devuelve</b> al lugar de la llamada."]);
+      if(v.modo === "return"){
+        pasos.push(["run", "💾", "<code>resultado = " + s + "</code>: el valor devuelto se guarda en la variable."]);
+        pasos.push(["out", "🖨️", "<code>print(resultado)</code> muestra: <b>" + s + "</b>"]);
+        mostrar({ codigo:cod, sal:[String(s)], fig:maq([String(a), String(b)], F + "(primero, segundo)", String(s)), pasos:pasos, estado:"resultado = " + s,
+          tabla:["print frente a return", [["print(primero + segundo)", "muestra el valor, pero se pierde", "mal"], ["return primero + segundo", "devuelve " + s + ": se guarda en resultado", "bien"]]],
+          ex:"La función <b>devolvió</b> " + s + " con <code>return</code> y eso se guardó en <code>resultado</code>. Ahora puedes mostrarlo, sumarlo con otra cosa o pasarlo a otra función." });
+      } else {
+        var d2 = s * 2;
+        pasos.push(["run", "✖️", "El valor devuelto vale " + s + ", así que la expresión queda <code>" + s + " * 2</code> = <b>" + d2 + "</b>."]);
+        pasos.push(["out", "🖨️", "<code>print(…)</code> muestra: <b>" + d2 + "</b>"]);
+        mostrar({ codigo:cod, sal:[String(d2)], fig:maq([String(a), String(b)], F + "(primero, segundo)", String(s)), pasos:pasos, estado:"sumar(" + a + ", " + b + ") vale " + s,
+          tabla:["Lo que hace posible el return", [["sumar(" + a + ", " + b + ")", String(s) + "   (un valor que se puede usar)", "bien"], ["sumar(" + a + ", " + b + ") * 2", String(d2), "sel"]]],
+          ex:"Como <code>sumar</code> <b>devuelve</b> el valor, la llamada <code>sumar(" + a + ", " + b + ")</code> se comporta como el número <b>" + s + "</b> y puedes multiplicarlo, compararlo o guardarlo. <b>Regla práctica:</b> si la función calcula algo, usa <code>return</code>; el <code>print</code> lo pone quien llama." });
+      }
+    } },
+
+  { id:"terminar", ico:"🛑", t:"return termina la función",
+    res:"En cuanto Python ejecuta un return, la función termina y regresa al lugar de la llamada. Lo que esté escrito después ya no se ejecuta. Una función puede tener varios return, pero solo se cumple uno.",
+    campos:[{ id:"modo", label:"¿Qué ejemplo quieres?", tipo:"sel", def:"if", opciones:[["if","Varios return con if (clasificar una edad)"],["muerto","Código después de un return"]] },
+            { id:"x", label:"Valor que se envía", tipo:"txt", def:"20", ph:"un número entero" }],
+    codigo:function(v){
+      if(v.modo === "muerto") return "def doble(numero):\n    return numero * 2\n    print(\"¿Me ejecuto?\")\n\nprint(doble(" + ri(v.x) + "))";
+      return "def clasificar(edad):\n    if edad >= 18:\n        return \"Mayor de edad\"\n    return \"Menor de edad\"\n\nprint(clasificar(" + ri(v.x) + "))";
+    },
+    run:function(v){
+      var x = parseEntero(v.x, "Valor"), cod = this.codigo(v), pasos, sal, fig;
+      if(v.modo === "muerto"){
+        var r = x * 2;
+        pasos = [["def", "📖", "<code>def doble(numero):</code> se guarda."], ["call", "📞", "Llamada <code>doble(" + x + ")</code>."], ["ret", "↩️", "<code>return numero * 2</code> devuelve <b>" + r + "</b> y la función <b>termina aquí</b>."],
+                 ["skip", "🚫", "<code>print(\"¿Me ejecuto?\")</code> está después del return: <b>nunca se ejecuta</b>."], ["out", "🖨️", "<code>print(…)</code> de afuera muestra: <b>" + r + "</b>"]];
+        sal = [String(r)]; fig = maq([String(x)], "doble(numero)", String(r));
+        mostrar({ codigo:cod, sal:sal, fig:fig, pasos:pasos, estado:"def doble(numero):   # termina en el return",
+          ex:"Después de <code>return</code> la función <b>se acaba</b>: el <code>print(\"¿Me ejecuto?\")</code> quedó como <b>código muerto</b> y nunca se vio. Pon siempre el <code>return</code> como <b>última línea</b> del camino que quieras ejecutar." });
+        return;
+      }
+      var mayor = x >= 18;
+      pasos = [["def", "📖", "<code>def clasificar(edad):</code> se guarda (con dos <code>return</code> adentro)."], ["call", "📞", "Llamada <code>clasificar(" + x + ")</code>: edad = <b>" + x + "</b>."],
+               ["run", "❓", "Se evalúa <code>edad &gt;= 18</code> → <b>" + x + " &gt;= 18</b> es <b>" + (mayor ? "True" : "False") + "</b>."]];
+      if(mayor){
+        pasos.push(["ret", "↩️", "Entra al <code>if</code>: <code>return \"Mayor de edad\"</code> y la función <b>termina</b>."]);
+        pasos.push(["skip", "🚫", "El segundo <code>return \"Menor de edad\"</code> <b>ya no se ejecuta</b>."]);
+      } else {
+        pasos.push(["skip", "🚫", "No entra al <code>if</code>, así que se salta <code>return \"Mayor de edad\"</code>."]);
+        pasos.push(["ret", "↩️", "Sigue con <code>return \"Menor de edad\"</code> y la función <b>termina</b>."]);
+      }
+      var res = mayor ? "Mayor de edad" : "Menor de edad";
+      pasos.push(["out", "🖨️", "<code>print(…)</code> muestra: <b>" + res + "</b>"]);
+      mostrar({ codigo:cod, sal:[res], fig:maq([String(x)], "clasificar(edad)", '"' + res + '"'), pasos:pasos, estado:"def clasificar(edad):   # dos return, solo se cumple uno",
+        ex:"La función tiene <b>dos</b> <code>return</code>, pero solo se ejecutó <b>uno</b>: el primero que Python alcanzó. " + (mayor ? "Como la condición fue verdadera, devolvió <b>\"Mayor de edad\"</b> y terminó, sin pasar por el segundo." : "Como la condición fue falsa, se saltó el <code>if</code> y devolvió <b>\"Menor de edad\"</b>.") + " Este patrón (<code>return</code> dentro de un <code>if</code>) se usa muchísimo." });
+    } },
+
+  { id:"multiples", ico:"🎁", t:"Devolver varios valores",
+    res:"Una función puede devolver más de un valor separándolos por comas: Python los empaqueta en una tupla. Al llamarla, puedes desempaquetarlos en varias variables.",
+    campos:[{ id:"nums", label:"Calificaciones (enteros separados por comas)", tipo:"txt", def:"7, 9, 6, 10, 8", ph:"7, 9, 6", ayuda:"Entre 1 y 8 números enteros." },
+            { id:"modo", label:"¿Cómo recibes el resultado?", tipo:"sel", def:"des", opciones:[["des","En tres variables: nota_minima, nota_maxima, nota_promedio = …"],["tupla","En una sola variable: resultado = …"],["mal","⚠ Con menos variables que valores"]] }],
+    codigo:function(v){
+      var L = "[" + items(v.nums).join(", ") + "]";
+      var d = "def estadisticas(numeros):\n    minimo = min(numeros)\n    maximo = max(numeros)\n    promedio = sum(numeros) / len(numeros)\n    return minimo, maximo, promedio\n\ncalificaciones = " + L + "\n";
+      if(v.modo === "tupla") return d + "resultado = estadisticas(calificaciones)\nprint(resultado)\nprint(type(resultado))";
+      if(v.modo === "mal") return d + "nota_minima, nota_maxima = estadisticas(calificaciones)";
+      return d + "nota_minima, nota_maxima, nota_promedio = estadisticas(calificaciones)\nprint(nota_minima, nota_maxima, nota_promedio)";
+    },
+    run:function(v){
+      var a = items(v.nums); if(!a.length || a.length > 8) throw { ui:"Escribe entre 1 y 8 números enteros." };
+      var L = a.map(function(t){ return parseEntero(t, "Calificación"); });
+      var mn = Math.min.apply(null, L), mx = Math.max.apply(null, L), pr = L.reduce(function(s, x){ return s + x; }, 0) / L.length;
+      var cod = this.codigo(v), lst = "[" + L.join(", ") + "]", ent = [lst], pasos = [["def", "📖", "<code>def estadisticas(numeros):</code> se guarda."],
+        ["call", "📞", "Llamada <code>estadisticas(" + lst + ")</code>."],
+        ["run", "🧮", "Calcula <b>minimo = " + mn + "</b>, <b>maximo = " + mx + "</b> y <b>promedio = " + pyF(pr) + "</b>."],
+        ["ret", "📦", "<code>return minimo, maximo, promedio</code> los <b>empaqueta en una tupla</b>: <b>(" + mn + ", " + mx + ", " + pyF(pr) + ")</b>."]];
+      var tup = "(" + mn + ", " + mx + ", " + pyF(pr) + ")";
+      if(v.modo === "mal"){
+        pasos.push(["err", "❌", "Python intenta repartir <b>3</b> valores en solo <b>2</b> variables (<code>nota_minima, nota_maxima</code>)."]);
+        throw { py:"ValueError: too many values to unpack (expected 2, got 3)",
+          por:"La función devuelve <b>3 valores</b> pero escribiste solo <b>2 variables</b>. Deben coincidir (<code>nota_minima, nota_maxima, nota_promedio = …</code>).", fig:maq(ent, "estadisticas(numeros)", tup), pasos:pasos };
+      }
+      if(v.modo === "tupla"){
+        pasos.push(["run", "💾", "<code>resultado = " + tup + "</code>: queda <b>una sola variable</b> con la tupla completa."]);
+        pasos.push(["out", "🖨️", "<code>print(resultado)</code> → <b>" + tup + "</b>"]);
+        pasos.push(["out", "🖨️", "<code>print(type(resultado))</code> → <b>&lt;class 'tuple'&gt;</b>"]);
+        mostrar({ codigo:cod, sal:[tup, "<class 'tuple'>"], fig:maq(ent, "estadisticas(numeros)", tup), pasos:pasos, estado:"resultado = " + tup,
+          ex:"Aunque escribiste <code>return</code> con tres valores separados por comas, la función devuelve <b>un solo objeto</b>: una <b>tupla</b>. Si la guardas en una variable, obtienes la tupla completa; para tomar un valor usa su posición, por ejemplo <code>resultado[0]</code>." });
+        return;
+      }
+      pasos.push(["run", "📦", "<b>Desempaquetado:</b> <code>nota_minima</code> = <b>" + mn + "</b>, <code>nota_maxima</code> = <b>" + mx + "</b>, <code>nota_promedio</code> = <b>" + pyF(pr) + "</b>."]);
+      pasos.push(["out", "🖨️", "<code>print(nota_minima, nota_maxima, nota_promedio)</code> → <b>" + mn + " " + mx + " " + pyF(pr) + "</b>"]);
+      mostrar({ codigo:cod, sal:[mn + " " + mx + " " + pyF(pr)], fig:maq(ent, "estadisticas(numeros)", tup), pasos:pasos, estado:"nota_minima, nota_maxima, nota_promedio = " + mn + ", " + mx + ", " + pyF(pr),
+        tabla:["Qué recibió cada variable", [["nota_minima", String(mn), "bien"], ["nota_maxima", String(mx), "bien"], ["nota_promedio", pyF(pr) + "   (la división siempre da float)", "bien"]]],
+        ex:"La función devolvió una tupla con <b>tres valores</b> y Python los <b>desempaquetó en orden</b> en <code>nota_minima</code>, <code>nota_maxima</code> y <code>nota_promedio</code>. Es la forma de «devolver varias cosas a la vez». Recuerda que el promedio sale con decimales (<code>" + pyF(pr) + "</code>) porque <code>/</code> siempre devuelve un <b>float</b>." });
+    } },
+
+  { id:"anidar", ico:"🪆", t:"Usar el resultado: variables, cálculos y funciones anidadas",
+    res:"Si una función devuelve un valor, la llamada se puede usar como si fuera ese valor: guardarla, operarla, usarla dentro de otra llamada o dentro de otra función.",
+    campos:[{ id:"a", label:"Primer número", tipo:"txt", def:"1", ph:"entero" },
+            { id:"b", label:"Segundo número", tipo:"txt", def:"2", ph:"entero" },
+            { id:"c", label:"Tercer número", tipo:"txt", def:"3", ph:"entero", si:function(v){ return v.modo === "anid"; } },
+            { id:"d", label:"Cuarto número", tipo:"txt", def:"4", ph:"entero", si:function(v){ return v.modo === "anid"; } },
+            { id:"modo", label:"¿Qué haces con el resultado?", tipo:"sel", def:"anid", opciones:[["var","Guardarlo en una variable"],["calc","Usarlo en un cálculo"],["anid","Funciones anidadas: sumar(sumar(primero, segundo), sumar(tercero, cuarto))"],["llama","Una función que llama a otra (promedio)"]] }],
+    codigo:function(v){
+      var a = ri(v.a), b = ri(v.b), c = ri(v.c), d = ri(v.d), s = "def sumar(primero, segundo):\n    return primero + segundo\n\n";
+      if(v.modo === "var") return s + "total = sumar(" + a + ", " + b + ")\nprint(f\"El total es {total}\")";
+      if(v.modo === "calc") return s + "print(sumar(" + a + ", " + b + ") * 10)";
+      if(v.modo === "llama") return s + "def promedio(primero, segundo):\n    return sumar(primero, segundo) / 2\n\nprint(promedio(" + a + ", " + b + "))";
+      return s + "total = sumar(sumar(" + a + ", " + b + "), sumar(" + c + ", " + d + "))\nprint(total)";
+    },
+    run:function(v){
+      var a = parseEntero(v.a, "Primer número"), b = parseEntero(v.b, "Segundo número"), c = parseEntero(v.c, "Tercer número"), d = parseEntero(v.d, "Cuarto número"), cod = this.codigo(v);
+      var pasos = [["def", "📖", "<code>def sumar(primero, segundo):</code> se guarda."]], sal, ex, estadoT, fig;
+      if(v.modo === "var"){
+        var t = a + b;
+        pasos.push(["call", "📞", "<code>sumar(" + a + ", " + b + ")</code> devuelve <b>" + t + "</b>."]);
+        pasos.push(["run", "💾", "<code>total = " + t + "</code>: el valor devuelto se guarda."]);
+        pasos.push(["out", "🖨️", "El f-string muestra: <b>El total es " + t + "</b>"]);
+        sal = ["El total es " + t]; estadoT = "total = " + t; fig = maq([String(a), String(b)], "sumar(primero, segundo)", String(t));
+        ex = "El valor que devuelve la función se puede <b>guardar en una variable</b> y usar después tantas veces como quieras (aquí dentro de un f-string).";
+      } else if(v.modo === "calc"){
+        var t2 = a + b, r2 = t2 * 10;
+        pasos.push(["call", "📞", "<code>sumar(" + a + ", " + b + ")</code> devuelve <b>" + t2 + "</b>."]);
+        pasos.push(["run", "✖️", "La expresión queda <code>" + t2 + " * 10</code> = <b>" + r2 + "</b>."]);
+        pasos.push(["out", "🖨️", "<code>print(…)</code> muestra: <b>" + r2 + "</b>"]);
+        sal = [String(r2)]; estadoT = "sumar(" + a + ", " + b + ") * 10 = " + r2; fig = maq([String(a), String(b)], "sumar(primero, segundo)", String(t2));
+        ex = "La llamada <code>sumar(" + a + ", " + b + ")</code> funciona como el número <b>" + t2 + "</b> dentro de una operación. Python resuelve <b>primero la llamada</b> y luego hace la multiplicación.";
+      } else if(v.modo === "llama"){
+        var s3 = a + b, r3 = s3 / 2;
+        pasos.splice(0, 0, ["def", "📖", "<code>def promedio(primero, segundo):</code> se guarda; adentro usa <code>sumar</code>."]);
+        pasos.push(["call", "📞", "<code>promedio(" + a + ", " + b + ")</code>: empieza a ejecutarse <code>promedio</code>."]);
+        pasos.push(["call", "📞", "Dentro de <code>promedio</code> se llama a <code>sumar(" + a + ", " + b + ")</code>, que devuelve <b>" + s3 + "</b>."]);
+        pasos.push(["ret", "↩️", "<code>promedio</code> calcula <code>" + s3 + " / 2</code> = <b>" + pyF(r3) + "</b> y lo devuelve."]);
+        pasos.push(["out", "🖨️", "<code>print(…)</code> muestra: <b>" + pyF(r3) + "</b>"]);
+        sal = [pyF(r3)]; estadoT = "promedio(" + a + ", " + b + ") = " + pyF(r3); fig = maq([String(a), String(b)], "promedio(primero, segundo)", pyF(r3));
+        ex = "Una función puede <b>llamar a otra</b>: <code>promedio</code> le pidió la suma a <code>sumar</code> y después la dividió entre 2. Así se arman programas grandes con funciones pequeñas, cada una con un solo trabajo. La división <code>/</code> siempre da <b>float</b> (<code>" + pyF(r3) + "</code>).";
+      } else {
+        var i1 = a + b, i2 = c + d, tot = i1 + i2;
+        pasos.push(["call", "📞", "Primero se resuelven las llamadas de <b>adentro</b>: <code>sumar(" + a + ", " + b + ")</code> → <b>" + i1 + "</b>."]);
+        pasos.push(["call", "📞", "Después <code>sumar(" + c + ", " + d + ")</code> → <b>" + i2 + "</b>."]);
+        pasos.push(["call", "📞", "Ahora la llamada de <b>afuera</b> recibe esos resultados: <code>sumar(" + i1 + ", " + i2 + ")</code> → <b>" + tot + "</b>."]);
+        pasos.push(["out", "🖨️", "<code>print(total)</code> muestra: <b>" + tot + "</b>"]);
+        sal = [String(tot)]; estadoT = "total = " + tot; fig = maq([String(i1), String(i2)], "sumar(primero, segundo)", String(tot));
+        ex = "Con funciones <b>anidadas</b>, Python resuelve primero lo de <b>adentro</b> y usa esos resultados como argumentos de la llamada de afuera: <code>sumar(sumar(" + a + ", " + b + "), sumar(" + c + ", " + d + "))</code> = <code>sumar(" + i1 + ", " + i2 + ")</code> = <b>" + tot + "</b>.";
+      }
+      mostrar({ codigo:cod, sal:sal, fig:fig, pasos:pasos, ex:ex, estado:estadoT });
+    } },
+
+  { id:"local", ico:"🏠", t:"Ámbito: variables locales y globales",
+    res:"Una variable creada dentro de una función es local: solo existe ahí y desaparece al terminar. Una variable creada fuera es global: se puede leer desde cualquier parte.",
+    campos:[{ id:"g", label:"Texto de la variable global", tipo:"txt", def:"Soy global", ph:"texto" },
+            { id:"l", label:"Texto de la variable local", tipo:"txt", def:"Soy local", ph:"texto" },
+            { id:"modo", label:"¿Qué quieres probar?", tipo:"sel", def:"ok", opciones:[["ok","Leer la local y la global dentro de la función"],["fuera","⚠ Usar la variable local fuera de la función"],["sombra","Local con el mismo nombre que la global"]] }],
+    codigo:function(v){
+      var G = q(v.g), L = q(v.l);
+      if(v.modo === "sombra") return "mensaje = " + G + "\n\ndef prueba():\n    mensaje = " + L + "\n    print(mensaje)\n\nprueba()\nprint(mensaje)";
+      var d = "mensaje = " + G + "          # global\n\ndef prueba():\n    saludo = " + L + "      # local\n    print(saludo)\n    print(mensaje)\n\nprueba()\n";
+      return d + (v.modo === "fuera" ? "print(saludo)" : "print(mensaje)");
+    },
+    run:function(v){
+      var G = txt(v.g), L = txt(v.l), cod = this.codigo(v), Ge = esc(G), Le = esc(L);
+      var pasos = [["def", "📖", "Python guarda la variable global <code>mensaje = \"" + Ge + "\"</code> y la función <code>prueba</code>."], ["call", "📞", "Llamada <code>prueba()</code>: se crea un <b>espacio local</b> nuevo."]];
+      if(v.modo === "sombra"){
+        pasos.push(["run", "🏠", "Dentro, <code>mensaje = \"" + Le + "\"</code> crea una variable <b>local nueva</b> con el mismo nombre. No toca la global."]);
+        pasos.push(["out", "🖨️", "<code>print(mensaje)</code> adentro usa la local: <b>" + Le + "</b>"]);
+        pasos.push(["ret", "🗑️", "La función termina y la variable <b>local desaparece</b>."]);
+        pasos.push(["out", "🖨️", "<code>print(mensaje)</code> afuera usa la global, intacta: <b>" + Ge + "</b>"]);
+        mostrar({ codigo:cod, sal:[L, G], fig:amb([["mensaje", '"' + G + '"']], [["mensaje", '"' + L + '"', "nuevo"]], "Ámbito local (mientras corre prueba)"), pasos:pasos, estado:"mensaje (global) = \"" + G + "\"   # intacta",
+          ex:"Hay <b>dos variables distintas</b> llamadas <code>mensaje</code>: la global y la local. Dentro de la función, Python usa la <b>local</b>; afuera, la <b>global</b>, que nunca cambió. Funciona, pero puede confundir: conviene usar nombres diferentes." });
+        return;
+      }
+      pasos.push(["run", "🏠", "<code>saludo = \"" + Le + "\"</code> crea una variable <b>local</b>: solo existe dentro de <code>prueba</code>."]);
+      pasos.push(["out", "🖨️", "<code>print(saludo)</code> → <b>" + Le + "</b>"]);
+      pasos.push(["out", "🖨️", "<code>print(mensaje)</code>: no hay local con ese nombre, así que <b>lee la global</b> → <b>" + Ge + "</b>"]);
+      pasos.push(["ret", "🗑️", "La función termina y <code>saludo</code> <b>desaparece</b> de la memoria."]);
+      if(v.modo === "fuera"){
+        pasos.push(["err", "❌", "<code>print(saludo)</code> afuera: Python busca <b>saludo</b> en el ámbito global y no existe."]);
+        throw { py:"NameError: name 'saludo' is not defined", sal:[L, G],
+          por:"<code>saludo</code> era una variable <b>local</b>: vivió solo mientras corría la función. Afuera ya no existe. Para usar un dato fuera de la función, hazla <b>devolverlo con return</b>.",
+          fig:amb([["mensaje", '"' + G + '"']], [["saludo", '"' + L + '"', "muerta"]], "Ámbito local (ya terminó la función)"), pasos:pasos };
+      }
+      pasos.push(["out", "🖨️", "<code>print(mensaje)</code> afuera → <b>" + Ge + "</b> (la global sigue ahí)."]);
+      mostrar({ codigo:cod, sal:[L, G, G], fig:amb([["mensaje", '"' + G + '"']], [["saludo", '"' + L + '"', "nuevo"]], "Ámbito local (mientras corre prueba)"), pasos:pasos, estado:"mensaje (global) = \"" + G + "\"",
+        ex:"Dentro de la función se pudieron usar <b>las dos</b>: la local (<code>saludo</code>) y la global (<code>mensaje</code>). Afuera solo queda la global, porque <code>saludo</code> desapareció al terminar la función. <b>Regla:</b> las funciones pueden <b>leer</b> las globales, pero lo que crean por dentro es local." });
+    } },
+
+  { id:"global", ico:"🌍", t:"Modificar una variable global (global)",
+    res:"Leer una global desde una función es fácil, pero modificarla exige la palabra global; si no, Python crea una variable local nueva. Lo más recomendable es devolver el valor con return.",
+    campos:[{ id:"veces", label:"Veces que llamas a la función (1 a 5)", tipo:"txt", def:"2", ph:"1 a 5", si:function(v){ return v.modo === "con" || v.modo === "ret"; } },
+            { id:"modo", label:"¿Qué quieres probar?", tipo:"sel", def:"con", opciones:[["con","Con global (funciona)"],["sin","⚠ Sin global: contador = contador + 1"],["asig","⚠ Asignar sin global (se crea una local)"],["ret","Mejor práctica: parámetro y return"]] }],
+    codigo:function(v){
+      var n = Math.max(1, Math.min(5, parseInt(v.veces, 10) || 1)), ll = function(f){ var s = []; for(var i = 0; i < n; i++) s.push(f); return s.join("\n"); };
+      if(v.modo === "sin") return "contador = 0\n\ndef incrementar_mal():\n    contador = contador + 1\n\nincrementar_mal()";
+      if(v.modo === "asig") return "contador = 0\n\ndef reiniciar():\n    contador = 5\n\nreiniciar()\nprint(contador)";
+      if(v.modo === "ret") return "contador = 0\n\ndef incrementar(valor):\n    return valor + 1\n\n" + ll("contador = incrementar(contador)") + "\nprint(contador)";
+      return "contador = 0\n\ndef incrementar():\n    global contador\n    contador += 1\n\n" + ll("incrementar()") + "\nprint(contador)";
+    },
+    run:function(v){
+      var cod = this.codigo(v), n = 1;
+      if(v.modo === "con" || v.modo === "ret"){ n = parseEntero(v.veces, "Veces"); if(n < 1 || n > 5) throw { ui:"Usa un número de llamadas entre 1 y 5." }; }
+      var pasos = [["def", "📖", "Python guarda <code>contador = 0</code> (global) y la función."]], i;
+      if(v.modo === "sin"){
+        pasos.push(["call", "📞", "Llamada <code>incrementar_mal()</code>."]);
+        pasos.push(["run", "🔎", "Al ver <code>contador = …</code> dentro de la función, Python decide que <b>contador es local</b> en toda la función."]);
+        pasos.push(["err", "❌", "Para calcular <code>contador + 1</code> necesita el valor de la local, pero <b>todavía no tiene ninguno</b>."]);
+        throw { py:"UnboundLocalError: cannot access local variable 'contador' where it is not associated with a value",
+          por:"Como la función <b>asigna</b> a <code>contador</code>, Python la trata como <b>variable local</b>; pero al intentar leerla para sumarle 1 aún no tiene valor. La solución es declarar <code>global contador</code> al inicio de la función (o, mejor, usar parámetro y <code>return</code>).",
+          fig:amb([["contador", "0"]], [["contador", "¿?", "muerta"]], "Ámbito local (contador sin valor)"), pasos:pasos };
+      }
+      if(v.modo === "asig"){
+        pasos.push(["call", "📞", "Llamada <code>reiniciar()</code>."]);
+        pasos.push(["run", "🏠", "<code>contador = 5</code> dentro de la función crea una variable <b>local nueva</b>; la global sigue valiendo 0."]);
+        pasos.push(["ret", "🗑️", "La función termina y la local <b>desaparece</b>."]);
+        pasos.push(["out", "🖨️", "<code>print(contador)</code> muestra la global: <b>0</b>"]);
+        mostrar({ codigo:cod, sal:["0"], fig:amb([["contador", "0"]], [["contador", "5", "nuevo"]], "Ámbito local (mientras corre reiniciar)"), pasos:pasos, estado:"contador (global) = 0   # no cambió",
+          ex:"Esperabas que el contador valiera 5, pero <b>sigue en 0</b>. Sin la palabra <code>global</code>, asignar dentro de la función crea una variable <b>local</b> que se pierde al terminar. Esto causa errores muy difíciles de ver, porque <b>no marca error</b>: simplemente no hace lo que querías." });
+        return;
+      }
+      var c = 0;
+      if(v.modo === "ret"){
+        pasos[0] = ["def", "📖", "Python guarda <code>contador = 0</code> y la función <code>incrementar(valor)</code>, que no toca ninguna global."];
+        for(i = 1; i <= n; i++){ pasos.push(["call", "📞", "<b>Llamada " + i + ":</b> <code>incrementar(" + c + ")</code> devuelve <b>" + (c + 1) + "</b>."]); c++; pasos.push(["run", "💾", "<code>contador = " + c + "</code> (se reasigna <b>afuera</b>, con el valor devuelto)."]); }
+        pasos.push(["out", "🖨️", "<code>print(contador)</code> → <b>" + c + "</b>"]);
+        mostrar({ codigo:cod, sal:[String(c)], fig:maq([String(c - 1)], "incrementar(valor)", String(c)), pasos:pasos, estado:"contador = " + c,
+          ex:"Misma meta, <b>sin usar global</b>: la función recibe el valor por <b>parámetro</b>, lo calcula y lo <b>devuelve</b>; quien llama decide qué hacer con él. El código es más claro, fácil de probar y reutilizable. Es la <b>buena práctica</b>: usa <code>global</code> solo cuando sea realmente necesario (por ejemplo, el estado compartido entre callbacks de Tkinter)." });
+        return;
+      }
+      pasos[0] = ["def", "📖", "Python guarda <code>contador = 0</code> (global) y la función <code>incrementar</code>, que declara <code>global contador</code>."];
+      for(i = 1; i <= n; i++){ pasos.push(["call", "📞", "<b>Llamada " + i + ":</b> <code>incrementar()</code> → <code>global contador</code> usa la <b>global</b>."]); c++; pasos.push(["run", "➕", "<code>contador += 1</code> → la global ahora vale <b>" + c + "</b>."]); }
+      pasos.push(["out", "🖨️", "<code>print(contador)</code> → <b>" + c + "</b>"]);
+      mostrar({ codigo:cod, sal:[String(c)], fig:amb([["contador", String(c), "cambio"]], [["(sin variables locales)", "—"]], "Ámbito local (la función usa la global)"), pasos:pasos, estado:"contador (global) = " + c,
+        ex:"Con <code>global contador</code> le dices a Python: «usa la variable global, no crees una local». Por eso cada llamada <b>sí cambió</b> el contador de afuera y terminó valiendo <b>" + c + "</b>. Úsalo con moderación: en Tkinter es común para contadores o banderas dentro de los callbacks." });
+    } }
+  ];
+
+  /* ---------- organización ---------- */
+  function porId(id){ return OPS_BASE.filter(function(o){ return o.id === id; })[0]; }
+  function nv(id, g, n){ var o = porId(id); o.grupo = g; o.nivel = n; return o; }
+  var OPS = [
+    nv("definir", "c", 1), nv("mostrar", "c", 1),
+    nv("params", "p", 1), nv("varios", "p", 1), nv("defecto", "p", 2),
+    nv("retorno", "r", 1), nv("terminar", "r", 2), nv("multiples", "r", 3), nv("anidar", "r", 2),
+    nv("local", "a", 1), nv("global", "a", 3)
+  ];
+  var GRUPOS = [
+    { id:"c", t:"Empieza aquí: definir y llamar una función",
+      d:"Una función se <b>define</b> una vez con <code>def</code> y se <b>llama</b> las veces que haga falta. Aquí ves la diferencia entre ambas cosas y entre la función y su resultado." },
+    { id:"p", t:"Parámetros y argumentos",
+      d:"Los <b>parámetros</b> permiten que la función reciba datos distintos en cada llamada. Aquí practicas uno, varios, el orden de los datos y los valores por defecto." },
+    { id:"r", t:"Valor de retorno (return)",
+      d:"Una función puede <b>mostrar</b> un resultado con <code>print</code> o <b>devolverlo</b> con <code>return</code>. Esta diferencia es la que más confunde al principio." },
+    { id:"a", t:"Ámbito de las variables",
+      d:"El <b>ámbito</b> es la zona del programa donde una variable existe. Entenderlo evita errores como <code>NameError</code> y <code>UnboundLocalError</code>." }
+  ];
+  var NIVELES = { 1:"Esencial", 2:"Intermedio", 3:"Avanzado" };
+
+  /* ---------- panel de operaciones ---------- */
+  function construirTabs(){
+    var nav = $("#ops");
+    GRUPOS.forEach(function(g){
+      var sec = document.createElement("section"); sec.className = "grupo";
+      sec.innerHTML = "<h2>" + esc(g.t) + "</h2>" +
+        '<p class="grupo-desc">' + g.d + ' Orden: <span class="nivel n1">Esencial</span> → <span class="nivel n2">Intermedio</span> → <span class="nivel n3">Avanzado</span></p>' +
+        '<div class="fila-tabs" role="tablist"></div>';
+      var fila = sec.querySelector(".fila-tabs");
+      OPS.filter(function(o){ return o.grupo === g.id; }).forEach(function(o){
+        var b = document.createElement("button");
+        b.type = "button"; b.setAttribute("role", "tab"); b.id = "tab-" + o.id;
+        b.innerHTML = o.ico + " " + esc(o.t) + ' <span class="nivel n' + o.nivel + '">' + NIVELES[o.nivel] + "</span>";
+        b.addEventListener("click", function(){ elegir(o.id); });
+        fila.appendChild(b);
+      });
+      nav.appendChild(sec);
+    });
+  }
+  function elegir(id, silencio){
+    detener(); clearTimeout(vistaTimer); op = OPS.filter(function(o){ return o.id === id; })[0];
+    OPS.forEach(function(o){ $("#tab-" + o.id).setAttribute("aria-selected", o === op ? "true" : "false"); });
+    $("#opTitulo").textContent = op.t; $("#opResumen").textContent = op.res;
+    var c = $("#campos"); c.innerHTML = "";
+    op.campos.forEach(function(f){
+      var def = typeof f.def === "function" ? f.def() : f.def;
+      var l = document.createElement("label"); l.className = "campo" + (f.tipo === "chk" ? " chk" : ""); l.dataset.id = f.id;
+      var h = "";
+      if(f.tipo === "sel"){
+        h = "<span>" + esc(f.label) + '</span><select id="f_' + f.id + '">' + f.opciones.map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === def ? " selected" : "") + ">" + esc(o[1]) + "</option>"; }).join("") + "</select>";
+      } else if(f.tipo === "chk"){
+        h = '<input type="checkbox" id="f_' + f.id + '"' + (def ? " checked" : "") + '><span>' + esc(f.label) + "</span>";
+      } else {
+        h = "<span>" + esc(f.label) + '</span><input type="text" id="f_' + f.id + '" value="' + esc(def) + '" placeholder="' + esc(f.ph || "") + '" autocomplete="off" spellcheck="false">';
+      }
+      if(f.ayuda) h += '<div class="ayuda">' + esc(f.ayuda) + "</div>";
+      l.innerHTML = h; c.appendChild(l);
+      var el = l.querySelector("input,select");
+      el.addEventListener("input", vistaPrevia); el.addEventListener("change", vistaPrevia);
+      el.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); ejecutar(); } });
+    });
+    vistaPrevia(); limpiarRes(); inicial();
+    explica("<b>" + esc(op.t) + ".</b> " + esc(op.res) + " Ajusta los datos de la izquierda y pulsa <b>▶ Ejecutar</b>; aquí abajo se explicará, en palabras sencillas, qué pasó.", true);
+    ultimaVoz = pronunciar(op.t + ". " + op.res + " Ajusta los datos y pulsa Ejecutar.");
+    if(!silencio) hablar(ultimaVoz);
+    construirQuiz(op.id);
+  }
+  function leer(){
+    var v = {};
+    op.campos.forEach(function(f){ var el = $("#f_" + f.id); v[f.id] = f.tipo === "chk" ? el.checked : el.value; });
+    return v;
+  }
+  function vistaPrevia(){
+    var v = leer();
+    op.campos.forEach(function(f){ if(f.si) $('[data-id="' + f.id + '"]').style.display = f.si(v) ? "" : "none"; });
+    $("#codigo").innerHTML = hl(op.codigo(v));
+  }
+  function ejecutar(){
+    detener(); clearTimeout(vistaTimer); limpiarRes();
+    var v = leer();
+    try { op.run(v); }
+    catch(e){
+      if(e && e.ui){ explica('<span class="aviso">⚠️ ' + esc(e.ui) + "</span>"); }
+      else if(e && e.py){
+        cons(op.codigo(v), "in");
+        (e.sal || []).forEach(function(s){ cons(s, "out"); });
+        cons(e.py, "err");
+        var p = (e.pasos || []).slice();
+        if(!p.length || p[p.length - 1][0] !== "err") p.push(["err", "❌", "<b>" + esc(e.py.split(":")[0]) + "</b>: Python detiene el programa aquí."]);
+        escena(e.fig, p);
+        estado("# " + e.py.split(":")[0]);
+        explica('<div class="err"><b>❌ ' + esc(e.py.split(":")[0]) + "</b>. " + e.por + "</div>");
+      } else { throw e; }
+    }
+    vistaPrevia();
+  }
+
+  $("#ejecutar").addEventListener("click", ejecutar);
+  $("#limpiarCons").addEventListener("click", function(){ lineasCons = []; $("#cons").innerHTML = ""; });
+
+  /* ---------- autoprueba: cambia según la operación elegida ---------- */
+  var QUIZ = {
+    definir: [
+      { q:`¿Qué hace la palabra def?`, o:[`Define (crea) una función sin ejecutarla`, `Ejecuta la función`, `Borra la función`], c:0, p:`def solo guarda la función en la memoria; el cuerpo no corre hasta que la llames.` },
+      { q:`Si solo escribes def saludar(): print('Hola') y nada más, ¿qué se muestra?`, o:[`Nada: la función nunca se llamó`, `Hola`, `Un error`], c:0, p:`Definir no ejecuta nada. Falta la llamada: saludar().` },
+      { q:`¿Cómo se llama (ejecuta) una función llamada saludar?`, o:[`saludar()`, `def saludar`, `saludar`], c:0, p:`Se escribe el nombre seguido de paréntesis. Sin paréntesis solo mencionas la función.` },
+      { q:`¿Qué pasa si llamas a una función antes de definirla?`, o:[`NameError: name is not defined`, `Funciona normal`, `Python la define sola`], c:0, p:`Python lee de arriba hacia abajo: primero se define, después se llama.` },
+      { q:`¿Cuántas veces se puede llamar una función ya definida?`, o:[`Todas las que quieras`, `Solo una vez`, `Máximo tres veces`], c:0, p:`Esa es su ventaja: escribes el código una vez y lo reutilizas cuantas veces haga falta.` }
+    ],
+    mostrar: [
+      { q:`Con def doble(numero): return numero * 2, ¿qué muestra print(doble)?`, o:[`<function doble at 0x…>, la función como objeto`, `doble`, `Un error`], c:0, p:`Sin paréntesis no se llama: print recibe la función misma y muestra su descripción.` },
+      { q:`Con la misma función, ¿qué muestra print(doble(4))?`, o:[`8`, `<function doble at 0x…>`, `4`], c:0, p:`doble(4) devuelve 8 y print lo muestra.` },
+      { q:`En un programa (archivo .py), ¿qué muestra la línea doble(4) escrita sola, sin print?`, o:[`Nada: se calcula 8 pero no se muestra`, `8`, `None`], c:0, p:`El resultado se calcula y se pierde; para verlo hay que usar print.` },
+      { q:`¿Qué muestra print(type(doble))?`, o:[`<class 'function'>`, `<class 'int'>`, `doble`], c:0, p:`En Python las funciones también tienen su propio tipo de dato.` },
+      { q:`¿Qué diferencia hay entre doble y doble(4)?`, o:[`doble es la función; doble(4) la llama y da un resultado`, `Son lo mismo`, `doble(4) define la función`], c:0, p:`Los paréntesis con argumentos son los que ejecutan la función.` }
+    ],
+    params: [
+      { q:`En def saludar(nombre):, ¿qué es nombre?`, o:[`Un parámetro`, `Un argumento`, `Una llamada`], c:0, p:`El parámetro es la variable que se escribe al definir la función.` },
+      { q:`En la llamada saludar('Ana'), ¿qué es 'Ana'?`, o:[`Un argumento`, `Un parámetro`, `Una función`], c:0, p:`El argumento es el valor concreto que se envía al llamar.` },
+      { q:`Si saludar necesita un dato y la llamas como saludar(), ¿qué pasa?`, o:[`TypeError: falta un argumento`, `Saluda a nadie`, `Usa None`], c:0, p:`Un parámetro sin valor por defecto es obligatorio.` },
+      { q:`Si saludar tiene un solo parámetro y la llamas con saludar('Ana', 'Luis'), ¿qué pasa?`, o:[`TypeError: recibe 1 argumento pero se dieron 2`, `Saluda a los dos`, `Ignora el segundo sin error`], c:0, p:`La cantidad de argumentos debe coincidir con la de parámetros.` },
+      { q:`¿Para qué sirven los parámetros?`, o:[`Para que la función trabaje con datos distintos en cada llamada`, `Para que la función sea más lenta`, `Para borrar variables`], c:0, p:`Sin parámetros, la función siempre haría exactamente lo mismo.` }
+    ],
+    varios: [
+      { q:`Con def presentar(nombre, edad), ¿qué hace presentar(16, 'Ana')?`, o:[`Pone 16 en nombre y 'Ana' en edad, sin avisar`, `Los acomoda solo`, `Da siempre error`], c:0, p:`Los argumentos se asignan por posición; Python no adivina lo que querías.` },
+      { q:`Con dos parámetros obligatorios, ¿qué pasa si envías un solo argumento?`, o:[`TypeError: falta un argumento`, `Usa 0 para el que falta`, `Funciona igual`], c:0, p:`Faltó un dato obligatorio.` },
+      { q:`¿Cómo se separan varios parámetros dentro del def?`, o:[`Con comas`, `Con puntos`, `Con dos puntos`], c:0, p:`def presentar(nombre, edad): los parámetros van separados por comas.` },
+      { q:`En presentar('Ana', 16), ¿qué valor recibe edad?`, o:[`16`, `'Ana'`, `Nada`], c:0, p:`El segundo argumento va al segundo parámetro.` },
+      { q:`¿El orden de los argumentos importa?`, o:[`Sí: se asignan según la posición`, `No, Python los ordena`, `Solo con números`], c:0, p:`Por eso hay que respetar el orden del def (o usar argumentos con nombre).` }
+    ],
+    defecto: [
+      { q:`En def saludar_con_titulo(nombre, titulo='Alumno'), ¿qué vale titulo si llamas saludar_con_titulo('López')?`, o:[`Alumno`, `None`, `Da error`], c:0, p:`Si el argumento no llega, se usa el valor por defecto.` },
+      { q:`¿Qué pasa con saludar_con_titulo('López', 'Profesor')?`, o:[`titulo vale Profesor: reemplaza el valor por defecto`, `Da error`, `titulo sigue valiendo Alumno`], c:0, p:`Un argumento enviado siempre reemplaza al valor por defecto.` },
+      { q:`¿Es válido escribir def saludar_con_titulo(titulo='Alumno', nombre):?`, o:[`No: SyntaxError, los opcionales van al final`, `Sí`, `Solo dentro de Tkinter`], c:0, p:`Los parámetros con valor por defecto deben ir después de los obligatorios.` },
+      { q:`¿Qué hace saludar_con_titulo(titulo='Doctor', nombre='Ruiz')?`, o:[`Funciona: con nombres el orden no importa`, `Da error`, `Intercambia los valores`], c:0, p:`Cada valor indica a qué parámetro pertenece.` },
+      { q:`¿Para qué sirve un valor por defecto?`, o:[`Para que ese argumento sea opcional`, `Para que el parámetro sea obligatorio`, `Para ocultar la función`], c:0, p:`Quien llama puede omitirlo y la función usa el valor predeterminado.` }
+    ],
+    retorno: [
+      { q:`Si una función solo hace print(primero + segundo) y escribes resultado = sumar_con_print(3, 4), ¿cuánto vale resultado?`, o:[`None`, `7`, `Un error`], c:0, p:`Sin return, la función devuelve None (nada).` },
+      { q:`¿Qué hace return?`, o:[`Devuelve un valor a quien llamó la función`, `Muestra el valor en pantalla`, `Borra la variable`], c:0, p:`return entrega el valor para que se guarde o se use; mostrarlo es trabajo de print.` },
+      { q:`Con def sumar(primero, segundo): return primero + segundo, ¿qué muestra print(sumar(10, 5) * 2)?`, o:[`30`, `15`, `Nada`], c:0, p:`sumar(10, 5) vale 15 y luego se multiplica por 2.` },
+      { q:`Si sumar_con_print solo usa print, ¿qué pasa con sumar_con_print(3, 4) * 2?`, o:[`TypeError: no se puede multiplicar None por un número`, `Da 14`, `Da 7`], c:0, p:`La función no devolvió nada, así que se intenta calcular None * 2.` },
+      { q:`Regla práctica: si una función calcula algo, ¿qué conviene usar?`, o:[`return`, `print`, `global`], c:0, p:`Así la función es reutilizable; el print lo pone quien llama.` }
+    ],
+    terminar: [
+      { q:`¿Qué pasa con el código escrito después de un return dentro de la función?`, o:[`No se ejecuta`, `Se ejecuta de todos modos`, `Se ejecuta dos veces`], c:0, p:`return termina la función en ese momento.` },
+      { q:`Si clasificar(edad) hace «if edad >= 18: return 'Mayor'» y luego «return 'Menor'», ¿qué devuelve clasificar(20)?`, o:[`'Mayor'`, `'Menor'`, `None`], c:0, p:`La condición es verdadera: devuelve 'Mayor' y termina.` },
+      { q:`Con la misma función, ¿qué devuelve clasificar(15)?`, o:[`'Menor'`, `'Mayor'`, `None`], c:0, p:`La condición es falsa, se salta el if y llega al segundo return.` },
+      { q:`Una función que no tiene ningún return, ¿qué devuelve?`, o:[`None`, `0`, `Un error`], c:0, p:`Python devuelve None cuando no hay return.` },
+      { q:`¿Una función puede tener más de un return?`, o:[`Sí, pero solo se ejecuta el primero que se alcance`, `No, solo uno`, `Sí, y se ejecutan todos`], c:0, p:`Al ejecutar un return, la función termina; los demás ya no se alcanzan.` }
+    ],
+    multiples: [
+      { q:`¿Qué empaqueta Python al escribir return a, b, c?`, o:[`Una tupla`, `Una lista`, `Un diccionario`], c:0, p:`Los valores separados por comas forman una tupla automáticamente.` },
+      { q:`Si estadisticas devuelve 3 valores, ¿qué pasa con nota_minima, nota_maxima = estadisticas(calificaciones)?`, o:[`ValueError: too many values to unpack`, `nota_minima y nota_maxima reciben los dos primeros`, `Funciona sin problema`], c:0, p:`Debe haber una variable por cada valor devuelto.` },
+      { q:`¿Cómo guardas los 3 valores en variables separadas?`, o:[`nota_minima, nota_maxima, nota_promedio = estadisticas(calificaciones)`, `nota_minima = estadisticas(calificaciones)[3]`, `nota_minima nota_maxima nota_promedio = estadisticas(calificaciones)`], c:0, p:`Es el desempaquetado: una variable por valor, separadas por comas.` },
+      { q:`Si resultado = estadisticas(calificaciones), ¿de qué tipo es resultado?`, o:[`tuple`, `list`, `int`], c:0, p:`Lo devuelto es una tupla con los tres valores.` },
+      { q:`¿Cómo obtienes solo el primer valor de la tupla resultado?`, o:[`resultado[0]`, `resultado.first`, `resultado(0)`], c:0, p:`Con corchetes y la posición, igual que en cualquier tupla.` }
+    ],
+    anidar: [
+      { q:`Con sumar(primero, segundo) que usa return, ¿cuánto vale sumar(sumar(1, 2), sumar(3, 4))?`, o:[`10`, `7`, `3`], c:0, p:`sumar(1, 2) = 3, sumar(3, 4) = 7 y luego sumar(3, 7) = 10.` },
+      { q:`En sumar(sumar(1, 2), sumar(3, 4)), ¿qué se resuelve primero?`, o:[`Las llamadas de adentro`, `La de afuera`, `Ninguna`], c:0, p:`Python resuelve primero lo de adentro para tener los argumentos de la llamada de afuera.` },
+      { q:`Para usar el resultado de una función dentro de otra operación, ¿qué necesita la función?`, o:[`Usar return`, `Usar print`, `Usar global`], c:0, p:`Solo lo que se devuelve puede reutilizarse; lo que se imprime se pierde.` },
+      { q:`¿Una función puede llamar a otra función?`, o:[`Sí`, `No`, `Solo si se llaman igual`], c:0, p:`Es lo normal: funciones pequeñas que se combinan.` },
+      { q:`Si promedio(primero, segundo) devuelve sumar(primero, segundo) / 2, ¿cuánto da promedio(8, 6)?`, o:[`7.0`, `14`, `7`], c:0, p:`sumar(8, 6) = 14 y 14 / 2 = 7.0: la división siempre devuelve float.` }
+    ],
+    local: [
+      { q:`Una variable creada dentro de una función, ¿dónde existe?`, o:[`Solo dentro de esa función`, `En todo el programa`, `En otros archivos`], c:0, p:`Es una variable local.` },
+      { q:`¿Qué pasa si imprimes, fuera de la función, una variable local?`, o:[`NameError: name is not defined`, `Muestra su valor`, `Muestra None`], c:0, p:`Al terminar la función, sus variables locales desaparecen.` },
+      { q:`¿Puede una función leer una variable global?`, o:[`Sí, sin problema`, `No`, `Solo si usa return`], c:0, p:`Leer una global funciona; lo que requiere cuidado es modificarla.` },
+      { q:`Si dentro de una función haces mensaje = 5 y afuera mensaje vale 10, ¿cuánto vale mensaje afuera al terminar la función?`, o:[`10`, `5`, `15`], c:0, p:`Dentro se creó otro mensaje (local); la global no se tocó.` },
+      { q:`¿Cuándo desaparece una variable local?`, o:[`Al terminar la función`, `Al cerrar Python`, `Nunca`], c:0, p:`Vive solo mientras se ejecuta la función.` }
+    ],
+    global: [
+      { q:`¿Para qué sirve escribir global contador dentro de una función?`, o:[`Para modificar la variable global en lugar de crear una local`, `Para borrar la variable`, `Para leerla únicamente`], c:0, p:`Le indica a Python que use la variable de afuera.` },
+      { q:`¿Qué error da contador = contador + 1 dentro de una función, sin global?`, o:[`UnboundLocalError`, `SyntaxError`, `KeyError`], c:0, p:`Python trata a contador como local, pero aún no tiene valor.` },
+      { q:`Si dentro de una función haces contador = 5 sin global, ¿qué pasa con el contador global?`, o:[`No cambia: se creó una variable local`, `Cambia a 5`, `Se borra`], c:0, p:`Es un error silencioso: no marca fallo pero tampoco hace lo que esperabas.` },
+      { q:`¿Qué se recomienda en lugar de depender de variables globales?`, o:[`Pasar datos por parámetros y devolver con return`, `Usar más global`, `Repetir el código`], c:0, p:`El código queda más predecible y fácil de probar.` },
+      { q:`¿Cuándo es razonable usar global en Tkinter?`, o:[`Cuando un callback debe cambiar un contador o bandera compartida`, `Siempre`, `Nunca`], c:0, p:`Es el caso típico: estado compartido entre callbacks.` }
+    ]
+  };
+  var respQuiz = {};
+  function hashTxt(t){ var h = 2166136261; for(var i = 0; i < t.length; i++){ h ^= t.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function totalGlobal(){
+    var t = 0, ok = 0;
+    Object.keys(QUIZ).forEach(function(id){
+      QUIZ[id].forEach(function(it, n){ t++; if(respQuiz[id] && respQuiz[id][n] === it.c) ok++; });
+    });
+    return { t: t, ok: ok };
+  }
+  function actualizarPuntaje(id){
+    var ok = 0, r = respQuiz[id] || {};
+    QUIZ[id].forEach(function(it, n){ if(r[n] === it.c) ok++; });
+    var g = totalGlobal();
+    $("#puntaje").textContent = "En esta pestaña: " + ok + " de " + QUIZ[id].length + " correctas. En todas: " + g.ok + " de " + g.t + ".";
+  }
+  function construirQuiz(id){
+    var lista_q = QUIZ[id] || [], qz = $("#quiz");
+    $("#quizTitulo").textContent = "Autoprueba rápida: " + (op ? op.t : "");
+    qz.innerHTML = "";
+    respQuiz[id] = respQuiz[id] || {};
+    lista_q.forEach(function(it, n){
+      var d = document.createElement("div"); d.className = "pregunta";
+      var orden = it.o.map(function(_, j){ return j; }).sort(function(a, b){ return hashTxt(it.q + "|" + a) - hashTxt(it.q + "|" + b); });
+      d.innerHTML = "<div><b>" + (n + 1) + ".</b> " + esc(it.q) + "</div>" +
+        orden.map(function(j){ return '<label><input type="radio" name="q' + n + '" value="' + j + '"> ' + esc(it.o[j]) + "</label>"; }).join("") +
+        '<div class="retro" hidden></div>';
+      qz.appendChild(d);
+      var r = d.querySelector(".retro");
+      function mostrarR(j){
+        var ok = j === it.c;
+        r.hidden = false; r.className = "retro " + (ok ? "ok" : "mal");
+        r.textContent = (ok ? "✅ ¡Correcto! " : "❌ Casi. ") + it.p;
+        return ok;
+      }
+      var previa = respQuiz[id][n];
+      if(previa !== undefined){ d.querySelector('input[value="' + previa + '"]').checked = true; mostrarR(previa); }
+      d.addEventListener("change", function(e){
+        if(e.target.type !== "radio") return;
+        var j = Number(e.target.value); respQuiz[id][n] = j;
+        var ok = mostrarR(j); actualizarPuntaje(id);
+        hablar((ok ? "Correcto. " : "Casi. ") + pronunciar(it.p));
+      });
+    });
+    actualizarPuntaje(id);
+  }
+
+  $("#introCodigo").innerHTML = hl('def saludar(nombre):              # def + nombre + (parámetros) + dos puntos\n    print(f"¡Hola, {nombre}!")    # cuerpo: indentado con 4 espacios\n\ndef sumar(primero, segundo):                  # dos parámetros\n    return primero + segundo                  # devuelve el resultado\n\nsaludar("Ana")                    # llamada: aquí sí se ejecuta\ntotal = sumar(3, 4)               # se guarda lo que devuelve: 7');
+  construirTabs(); iniciarVoz(); elegir("definir", true);
+})();
+
+</script>
+</body>
+</html>
