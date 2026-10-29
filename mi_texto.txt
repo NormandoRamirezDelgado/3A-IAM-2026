@@ -1,0 +1,6 @@
+Esto es un 
+archico de texto
+que se puede
+leer desde 
+Colab utilizando
+Python
